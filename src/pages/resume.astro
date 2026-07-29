@@ -1,9 +1,246 @@
 ---
 import Layout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { resume, skills, socials } from '../data/site.js';
+import { withBase } from '../lib/url.js';
+
+const email = socials.find((s) => s.label === 'Email');
 ---
-<Layout>
-  <section class="section-block">
-    <h1>Resume</h1>
-    <p>Resume content will be added here.</p>
+
+<Layout title="Resume" description="Education, experience and skills.">
+  <PageHeader eyebrow="Resume" title="The structured version." lede={resume.summary} accent="a">
+    <div class="header-actions">
+      <a class="btn" href={withBase(resume.pdf)} download>
+        Download PDF <span class="btn-arrow" aria-hidden="true">↓</span>
+      </a>
+      {email && <a class="btn btn-ghost" href={email.href}>Email me</a>}
+    </div>
+    <p class="pdf-note">
+      The download works once you drop your CV at <code>public{resume.pdf}</code>.
+    </p>
+  </PageHeader>
+
+  <section class="section">
+    <div class="section-head" data-reveal="0">
+      <div>
+        <p class="eyebrow">01 — Experience</p>
+        <h2>Where I’ve worked</h2>
+      </div>
+    </div>
+
+    <ol class="timeline">
+      {resume.experience.map((job, i) => (
+        <li class="timeline-item" data-reveal={i}>
+          <div class="timeline-period">{job.period}</div>
+          <div class="timeline-body">
+            <h3>{job.role}</h3>
+            <p class="timeline-org">{job.org}</p>
+            <p class="timeline-detail">{job.detail}</p>
+            {job.tags?.length > 0 && (
+              <div class="chip-row">
+                {job.tags.map((tag) => <span class="chip">{tag}</span>)}
+              </div>
+            )}
+          </div>
+        </li>
+      ))}
+    </ol>
   </section>
+
+  <section class="section">
+    <div class="section-head" data-reveal="0">
+      <div>
+        <p class="eyebrow">02 — Education</p>
+        <h2>Where I studied</h2>
+      </div>
+    </div>
+
+    <ol class="timeline">
+      {resume.education.map((entry, i) => (
+        <li class="timeline-item" data-reveal={i}>
+          <div class="timeline-period">{entry.period}</div>
+          <div class="timeline-body">
+            <h3>{entry.credential}</h3>
+            <p class="timeline-org">{entry.school}</p>
+            <p class="timeline-detail">{entry.detail}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="section">
+    <div class="section-head" data-reveal="0">
+      <div>
+        <p class="eyebrow">03 — Skills</p>
+        <h2>What I bring</h2>
+      </div>
+    </div>
+
+    <div class="skill-columns">
+      {skills.map((group, i) => (
+        <div class="panel" data-accent={group.accent} data-reveal={i}>
+          <h3>{group.title}</h3>
+          <ul>
+            {group.items.map((item) => <li>{item}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  {resume.awards?.length > 0 && (
+    <section class="section">
+      <div class="section-head" data-reveal="0">
+        <div>
+          <p class="eyebrow">04 — Recognition</p>
+          <h2>Awards</h2>
+        </div>
+      </div>
+
+      <ul class="awards">
+        {resume.awards.map((award, i) => (
+          <li data-reveal={i}>
+            <span>{award.title}</span>
+            <span class="award-year">{award.period}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </Layout>
+
+<style>
+  .header-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 2rem;
+  }
+
+  .pdf-note {
+    margin-top: 1rem;
+    font-size: 0.82rem;
+    color: var(--ink-faint);
+  }
+
+  .pdf-note code {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 6px;
+    background: var(--glass-hi);
+    color: var(--ink-dim);
+  }
+
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 190px 1fr;
+    gap: clamp(1rem, 4vw, 3rem);
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--line);
+    position: relative;
+  }
+
+  .timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -1.25rem;
+    top: 2.4rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--a);
+    opacity: 0;
+    transition: opacity 0.35s var(--ease);
+  }
+
+  .timeline-item:hover::before { opacity: 1; }
+
+  .timeline-period {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    padding-top: 0.35rem;
+  }
+
+  .timeline-org {
+    color: var(--a);
+    font-weight: 500;
+    margin-top: 0.3rem;
+  }
+
+  .timeline-detail {
+    color: var(--ink-dim);
+    margin-top: 0.75rem;
+    max-width: 62ch;
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1rem; }
+
+  .skill-columns {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  }
+
+  .skill-columns ul {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    color: var(--ink-dim);
+    font-size: 0.94rem;
+  }
+
+  .skill-columns li { padding-left: 1rem; position: relative; }
+
+  .skill-columns li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.65em;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .awards {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .awards li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding-block: 1.15rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .award-year {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--ink-faint);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 700px) {
+    .timeline-item { grid-template-columns: 1fr; gap: 0.75rem; }
+  }
+</style>

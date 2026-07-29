@@ -1,75 +1,492 @@
 ---
 import Layout from '../layouts/BaseLayout.astro';
-import { projectCards } from '../data/projects.js';
 import GridMotion from '../components/GridMotion.jsx';
+import ProjectCard from '../components/ProjectCard.astro';
+import { featured } from '../data/projects.js';
+import { site, skills, socials } from '../data/site.js';
+import { withBase } from '../lib/url.js';
+import { getImage } from 'astro:assets';
+import photo1 from '../images/photo-1.jpg';
+import photo2 from '../images/photo-2.jpg';
 
+// Resize + re-encode at build time. The source JPEGs are several megabytes each;
+// these come out around 60–120 KB.
+const tile1 = await getImage({ src: photo1, width: 640, format: 'webp', quality: 70 });
+const tile2 = await getImage({ src: photo2, width: 640, format: 'webp', quality: 70 });
+const PORTRAIT_W = 900;
+const portrait = await getImage({ src: photo1, width: PORTRAIT_W, format: 'webp', quality: 78 });
+const portraitH = Math.round((PORTRAIT_W * photo1.height) / photo1.width);
+
+// 28 tiles = 4 rows × 7 columns. Mix of words, images and glyphs so the grid
+// reads as a collage of what the site is about rather than filler.
 const gridItems = [
-  'Item 1',
-  'Item 2',
-  'Item 3',
-  'Item 4',
-  'Item 5',
-  'Item 6',
-  'Item 7',
-  'Item 8',
-  'Item 9',
-  'Item 10',
-  'Item 11',
-  'Item 12',
-  'Item 13',
-  'Item 14',
-  'Item 15',
-  'Item 16',
-  'Item 17',
-  'Item 18',
-  'Item 19',
-  'Item 20',
-  'Item 21',
-  'Item 22',
-  'Item 23',
-  'Item 24',
-  'Item 25',
-  'Item 26',
-  'Item 27',
-  'Item 28',
+  { text: 'research', kind: 'solid', tone: 'b' },
+  { text: 'deGDP', kind: 'outline' },
+  { image: tile1.src, alt: '' },
+  { text: '☯', kind: 'glyph' },
+  { text: 'interfaces', kind: 'outline' },
+  { text: 'GSAP', kind: 'mono' },
+  { text: 'motion', kind: 'solid', tone: 'a' },
+
+  { text: 'Astro', kind: 'mono' },
+  { text: 'I-Ching', kind: 'outline' },
+  { text: 'design', kind: 'solid', tone: 'c' },
+  { image: tile2.src, alt: '' },
+  { text: '🍜', kind: 'glyph' },
+  { text: 'data viz', kind: 'outline' },
+  { text: 'React', kind: 'mono' },
+
+  { text: 'play', kind: 'solid', tone: 'a' },
+  { text: '📷', kind: 'glyph' },
+  { text: 'typography', kind: 'outline' },
+  { text: 'Python', kind: 'mono' },
+  { image: tile1.src, alt: '' },
+  { text: 'systems', kind: 'outline' },
+  { text: 'build', kind: 'solid', tone: 'b' },
+
+  { text: 'curiosity', kind: 'outline' },
+  { text: 'TypeScript', kind: 'mono' },
+  { text: '🎧', kind: 'glyph' },
+  { text: 'storytelling', kind: 'solid', tone: 'c' },
+  { image: tile2.src, alt: '' },
+  { text: 'prototyping', kind: 'outline' },
+  { text: 'Figma', kind: 'mono' },
 ];
+
+const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling', 'Front-end', 'Play'];
 ---
-<Layout>
+
+<Layout bleed>
+  <!-- ===================== HERO ===================== -->
   <section class="hero">
-    <GridMotion client:load gradientColor="#071023" items={gridItems} />
-  </section>
+    <GridMotion client:load items={gridItems} gradientColor="#2a1650" />
 
-  <section id="projects" class="projects">
-    <h2>Research</h2>
-    <div class="grid">
-      {projectCards.slice(0, 3).map((project) => (
-        <a class="card" href={project.href}>
-          <div class="card-title">{project.label}</div>
-          <p class="project-card-description">{project.description}</p>
+    <div class="hero-content shell">
+      <p class="eyebrow">{site.location} · Available for work</p>
+
+      <h1 class="hero-title">
+        <span class="hero-line">Aine</span>
+        <span class="hero-line grad">Zhang</span>
+      </h1>
+
+      <p class="hero-role">
+        {site.role}
+        <span class="hero-rotator" aria-hidden="true">
+          <span class="hero-rotator-word" id="rotator" data-words={JSON.stringify(site.keywords)}>
+            {site.keywords[0]}
+          </span>
+        </span>
+      </p>
+
+      <p class="lede hero-lede">{site.tagline}</p>
+
+      <div class="hero-actions">
+        <a class="btn" href={withBase('/projects')}>
+          See the work <span class="btn-arrow" aria-hidden="true">↗</span>
         </a>
-      ))}
+        <a class="btn btn-ghost" href={withBase('/contact')}>Get in touch</a>
+      </div>
     </div>
 
-    <h2>Other Projects</h2>
-    <div class="grid">
-      {projectCards.slice(3).map((project) => (
-        <a class="card" href={project.href}>
-          <div class="card-title">{project.label}</div>
-          <p class="project-card-description">{project.description}</p>
-        </a>
+    <a class="scroll-cue" href="#intro" aria-label="Scroll to content">
+      <span class="scroll-cue-line"></span>
+      <span class="scroll-cue-text">scroll</span>
+    </a>
+  </section>
+
+  <!-- ===================== MARQUEE ===================== -->
+  <div class="marquee">
+    <div class="marquee-track">
+      {[0, 1].map(() => (
+        <div class="marquee-item">
+          {marquee.map((word) => (<>{word}<span aria-hidden="true">✦</span></>))}
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- ===================== INTRO ===================== -->
+  <section class="section shell" id="intro">
+    <div class="panel panel-split intro-panel" data-reveal="0">
+      <div>
+        <p class="eyebrow">Hello</p>
+        <h2>I make software that<br />doesn’t feel like software.</h2>
+        <div class="prose" style="margin-top: 1.25rem;">
+          <p>
+            I’m a developer and designer working somewhere between research tooling and
+            interaction design. I like problems where the interface <strong>is</strong> the
+            argument — where how something moves changes what it means.
+          </p>
+          <p>
+            Recent work spans a rethinking of economic indicators, a three-thousand-year-old
+            divination system rebuilt for the browser, and whatever I’m tinkering with this week.
+          </p>
+        </div>
+        <div class="hero-actions" style="margin-top: 1.75rem;">
+          <a class="btn btn-ghost" href={withBase('/about')}>
+            More about me <span class="btn-arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="intro-photo">
+        <img
+          src={portrait.src}
+          alt="Aine Zhang"
+          width={PORTRAIT_W}
+          height={portraitH}
+          loading="lazy"
+          decoding="async"
+        />
+        <div class="intro-photo-tag">
+          <span class="status" data-status="live">Currently building</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== WORK ===================== -->
+  <section class="section shell" id="work">
+    <div class="section-head" data-reveal="0">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2>Things I’ve made</h2>
+      </div>
+      <p>
+        A few projects worth showing. The full list — including the half-finished ones —
+        lives on the <a class="link" href={withBase('/projects')}>work page</a>.
+      </p>
+    </div>
+
+    <div class="card-grid">
+      {featured.map((project, i) => <ProjectCard project={project} index={i} />)}
+    </div>
+  </section>
+
+  <!-- ===================== SKILLS ===================== -->
+  <section class="section shell" id="skills">
+    <div class="section-head" data-reveal="0">
+      <div>
+        <p class="eyebrow">Toolkit</p>
+        <h2>What I work with</h2>
+      </div>
+    </div>
+
+    <div class="skills-grid">
+      {skills.map((group, i) => (
+        <div class="panel skill-card" data-accent={group.accent} data-reveal={i}>
+          <div class="skill-index">0{i + 1}</div>
+          <h3>{group.title}</h3>
+          <ul class="skill-list">
+            {group.items.map((item) => <li><span class="skill-bullet"></span>{item}</li>)}
+          </ul>
+        </div>
       ))}
     </div>
   </section>
 
-  <section id="contact" class="contact">
-    <h2>Contact</h2>
-    <p>Please reach me through the following methods:</p>
-    <ul>
-      <li><strong>Phone:</strong> 123-456-7890</li>
-      <li><strong>Email:</strong> <a href="mailto:hello@example.com">hello@example.com</a></li>
-      <li><strong>LinkedIn:</strong> <a href="https://linkedin.com/" target="_blank">linkedin.com/in/ainezhang</a></li>
-      <li><strong>GitHub:</strong> <a href="https://github.com/" target="_blank">github.com/ainezhang</a></li>
-      <li><strong>Instagram:</strong> <a href="https://instagram.com/" target="_blank">instagram.com/ainezhang</a></li>
-    </ul>
+  <!-- ===================== CONTACT ===================== -->
+  <section class="section shell" id="contact">
+    <div class="panel contact-cta" data-reveal="0">
+      <div>
+        <p class="eyebrow">Next</p>
+        <h2>Got something<br />worth building?</h2>
+        <p class="lede" style="margin-top: 1rem;">
+          I’m open to internships, collaborations, and projects that sound like a bad idea
+          until they work.
+        </p>
+      </div>
+
+      <div class="contact-list">
+        {socials.map((s) => (
+          <a
+            class="contact-row"
+            href={s.href}
+            target={s.href.startsWith('http') ? '_blank' : undefined}
+            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            <span class="contact-label">{s.label}</span>
+            <span class="contact-handle">{s.handle}</span>
+            <span class="contact-arrow" aria-hidden="true">↗</span>
+          </a>
+        ))}
+      </div>
+    </div>
   </section>
 </Layout>
+
+<style>
+  /* ---------------- hero ---------------- */
+  .hero {
+    position: relative;
+    min-height: min(100svh, 940px);
+    display: grid;
+    place-items: center;
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+    padding-block: 6rem 8rem;
+    margin-top: calc(-1 * (4.5rem));
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: hero-in 1s var(--ease) both;
+  }
+
+  @keyframes hero-in {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .hero-title {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0 0.28em;
+    margin-bottom: 0.75rem;
+    font-size: clamp(3.5rem, 15vw, 10rem);
+    line-height: 0.88;
+  }
+
+  .hero-line { display: block; }
+
+  .hero-role {
+    display: inline-flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: clamp(0.75rem, 1.5vw, 0.92rem);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+  }
+
+  .hero-rotator {
+    display: inline-flex;
+    padding: 0.15rem 0.6rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--glass);
+    color: var(--c);
+    min-width: 8ch;
+    justify-content: center;
+  }
+
+  .hero-rotator-word { animation: word-in 0.45s var(--ease); }
+
+  @keyframes word-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .hero-lede {
+    margin-top: 1.5rem;
+    text-align: center;
+    max-width: 52ch;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-top: 2.25rem;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .scroll-cue-line {
+    width: 1px;
+    height: 46px;
+    background: linear-gradient(var(--ink-faint), transparent);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-cue-line::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    height: 14px;
+    background: var(--c);
+    animation: cue 2.1s var(--ease) infinite;
+  }
+
+  @keyframes cue {
+    0% { transform: translateY(-16px); opacity: 0; }
+    35% { opacity: 1; }
+    100% { transform: translateY(46px); opacity: 0; }
+  }
+
+  /* ---------------- intro ---------------- */
+  .intro-panel { align-items: center; }
+
+  .intro-photo {
+    position: relative;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    aspect-ratio: 4 / 5;
+  }
+
+  .intro-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.9) contrast(1.05);
+    transition: transform 0.8s var(--ease);
+  }
+
+  .intro-photo:hover img { transform: scale(1.04); }
+
+  .intro-photo-tag {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: 999px;
+    background: rgba(7, 6, 12, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--line);
+  }
+
+  /* ---------------- skills ---------------- */
+  .skills-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
+  }
+
+  .skill-card {
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+
+  .skill-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+  }
+
+  .skill-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+  .skill-card:hover::after { transform: scaleX(1); }
+
+  .skill-index {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    margin-bottom: 0.6rem;
+  }
+
+  .skill-list {
+    list-style: none;
+    padding: 0;
+    margin: 1.1rem 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    color: var(--ink-dim);
+    font-size: 0.94rem;
+  }
+
+  .skill-list li { display: flex; align-items: center; gap: 0.7rem; }
+
+  .skill-bullet {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex: none;
+  }
+
+  /* ---------------- contact ---------------- */
+  .contact-cta {
+    display: grid;
+    gap: clamp(2rem, 5vw, 4rem);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    align-items: center;
+  }
+
+  .contact-list { display: flex; flex-direction: column; }
+
+  .contact-row {
+    display: grid;
+    grid-template-columns: 7rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0.25rem;
+    border-top: 1px solid var(--line);
+    text-decoration: none;
+    transition: padding 0.3s var(--ease), color 0.3s var(--ease);
+  }
+
+  .contact-row:last-child { border-bottom: 1px solid var(--line); }
+  .contact-row:hover { padding-inline: 0.75rem 0; color: var(--c); }
+
+  .contact-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .contact-handle { font-weight: 500; overflow-wrap: anywhere; }
+  .contact-arrow { color: var(--ink-faint); }
+  .contact-row:hover .contact-arrow { color: var(--c); }
+
+  @media (max-width: 560px) {
+    .contact-row { grid-template-columns: 1fr auto; }
+    .contact-label { grid-column: 1 / -1; }
+  }
+</style>
+
+<script>
+  // Rotating keyword in the hero subtitle.
+  const rotator = document.getElementById('rotator');
+  const words = JSON.parse(rotator?.dataset.words ?? '[]');
+
+  if (rotator && words.length > 1 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    let i = 0;
+    setInterval(() => {
+      i = (i + 1) % words.length;
+      rotator.textContent = words[i];
+      // restart the entry animation
+      rotator.style.animation = 'none';
+      void rotator.offsetWidth;
+      rotator.style.animation = '';
+    }, 2200);
+  }
+</script>

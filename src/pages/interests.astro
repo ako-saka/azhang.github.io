@@ -1,89 +1,267 @@
 ---
 import Layout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import { interests } from '../data/site.js';
+
+const accents = ['a', 'b', 'c'];
+const allTags = [...new Set(interests.flatMap((i) => i.tags))];
 ---
-<Layout>
-  <section class="section-block">
-    <h1>Interests</h1>
-    <div class="interest-grid">
-      <div>
-        <h2>Professional / Academic</h2>
-        <p>Passionate about software development, machine learning, and digital design.</p>
+
+<Layout title="Interests" description="The non-work half: food, music, books, photography and other rabbit holes.">
+  <PageHeader
+    eyebrow="Interests"
+    title="The other half of the story."
+    lede="Type anything below — it filters live. Try “noodles”, “film”, or something that isn’t here at all."
+    accent="c"
+  />
+
+  <section class="section">
+    <div class="explorer" data-reveal="0">
+      <div class="search">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input
+          id="interest-input"
+          type="search"
+          placeholder="Search interests…"
+          autocomplete="off"
+          aria-label="Search interests"
+          aria-describedby="result-count"
+        />
+        <kbd class="search-kbd">/</kbd>
       </div>
-      <div>
-        <h2>Hobbies</h2>
-        <div class="text-box interactive-box">
-          <label for="interest-input">Explore hobbies</label>
-          <input id="interest-input" type="text" placeholder="Type a hobby keyword..." />
-          <ul id="search-history" class="search-history">
-            <li data-keyword="food">food</li>
-            <li data-keyword="music">music</li>
-            <li data-keyword="books">books</li>
-          </ul>
-          <div id="food-island" class="hidden island">
-            <p>food tastes good</p>
+
+      <div class="tag-cloud" role="group" aria-label="Filter by tag">
+        <button class="tag is-active" type="button" data-tag="">All</button>
+        {allTags.map((tag) => (
+          <button class="tag" type="button" data-tag={tag}>{tag}</button>
+        ))}
+      </div>
+
+      <p class="count" id="result-count" aria-live="polite">
+        Showing {interests.length} of {interests.length}
+      </p>
+    </div>
+
+    <div class="interest-grid" id="interest-grid">
+      {interests.map((item, i) => (
+        <article
+          class="interest-card"
+          data-accent={accents[i % accents.length]}
+          data-reveal={i}
+          data-search={`${item.title} ${item.tags.join(' ')} ${item.blurb}`.toLowerCase()}
+          data-tags={item.tags.join(' ')}
+        >
+          <div class="interest-emoji" aria-hidden="true">{item.emoji}</div>
+          <h3>{item.title}</h3>
+          <p>{item.blurb}</p>
+          <div class="chip-row">
+            {item.tags.map((tag) => <span class="chip">{tag}</span>)}
           </div>
-        </div>
-      </div>
+        </article>
+      ))}
+    </div>
+
+    <div class="empty hidden" id="empty-state">
+      <p class="empty-emoji" aria-hidden="true">🔍</p>
+      <h3>Nothing here — yet.</h3>
+      <p>
+        I probably <em>am</em> interested in <span id="empty-term">that</span>, I just haven’t
+        written it down. <a class="link" href="mailto:aine2007@live.com">Tell me about it.</a>
+      </p>
     </div>
   </section>
-  <script type="module">
-    const input = document.getElementById('interest-input');
-    const history = document.getElementById('search-history');
-    const foodIsland = document.getElementById('food-island');
-    const searchBox = document.querySelector('.interactive-box');
-
-    function showFoodIsland() {
-      foodIsland.classList.remove('hidden');
-    }
-
-    function hideFoodIsland() {
-      foodIsland.classList.add('hidden');
-    }
-
-    function isFoodKeyword(keyword) {
-      return keyword.trim().toLowerCase() === 'food';
-    }
-
-    function submitSearch(keyword) {
-      if (isFoodKeyword(keyword)) {
-        showFoodIsland();
-      } else {
-        hideFoodIsland();
-      }
-    }
-
-    function showHistory() {
-      history.classList.add('visible');
-    }
-
-    function hideHistory() {
-      history.classList.remove('visible');
-    }
-
-    searchBox.addEventListener('click', () => {
-      input.focus();
-    });
-
-    input.addEventListener('focus', showHistory);
-    input.addEventListener('blur', () => {
-      setTimeout(hideHistory, 150);
-    });
-
-    input.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        submitSearch(input.value);
-        hideHistory();
-      }
-    });
-
-    history.addEventListener('click', (event) => {
-      const target = event.target.closest('li[data-keyword]');
-      if (!target) return;
-      const keyword = target.dataset.keyword;
-      input.value = keyword;
-      submitSearch(keyword);
-      hideHistory();
-    });
-  </script>
 </Layout>
+
+<style>
+  .explorer { margin-bottom: 2.5rem; }
+
+  .search {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.35rem 0.5rem 0.35rem 1.15rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--glass);
+    transition: border-color 0.3s var(--ease), background 0.3s var(--ease);
+    max-width: 520px;
+  }
+
+  .search:focus-within {
+    border-color: color-mix(in srgb, var(--c) 60%, transparent);
+    background: var(--glass-hi);
+  }
+
+  .search-icon { color: var(--ink-faint); font-size: 1.15rem; }
+
+  .search input {
+    flex: 1;
+    padding: 0.75rem 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-size: 1rem;
+  }
+
+  .search input::-webkit-search-cancel-button { filter: invert(1) opacity(0.4); }
+
+  .search-kbd {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink-faint);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .tag {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: transparent;
+    color: var(--ink-dim);
+    font-size: 0.82rem;
+    cursor: pointer;
+    transition: color 0.25s var(--ease), border-color 0.25s var(--ease), background 0.25s var(--ease);
+  }
+
+  .tag:hover { color: var(--ink); border-color: var(--line-strong); }
+
+  .tag.is-active {
+    color: #0b0710;
+    background: var(--c);
+    border-color: var(--c);
+    font-weight: 600;
+  }
+
+  .count {
+    margin-top: 1.1rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .interest-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 1.25rem;
+  }
+
+  .interest-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding: 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    background: var(--glass);
+    transition: transform 0.4s var(--ease), border-color 0.4s var(--ease), opacity 0.3s var(--ease);
+  }
+
+  .interest-card:hover {
+    transform: translateY(-5px);
+    border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  }
+
+  .interest-card p { color: var(--ink-dim); font-size: 0.95rem; flex: 1; }
+
+  .interest-emoji {
+    width: 52px;
+    height: 52px;
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    font-size: 1.6rem;
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    margin-bottom: 0.4rem;
+  }
+
+  .chip-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.5rem; }
+
+  .interest-card.is-hidden { display: none; }
+
+  .empty {
+    text-align: center;
+    padding: 4rem 1rem;
+    border: 1px dashed var(--line-strong);
+    border-radius: var(--radius-lg);
+  }
+
+  .empty p { color: var(--ink-dim); }
+  .empty-emoji { font-size: 2.5rem; margin-bottom: 0.75rem; }
+  .empty h3 { margin-bottom: 0.6rem; }
+  .hidden { display: none; }
+
+  #empty-term { color: var(--c); font-style: italic; }
+</style>
+
+<script>
+  const input = document.getElementById('interest-input');
+  const grid = document.getElementById('interest-grid');
+  const cards = Array.from(document.querySelectorAll('.interest-card'));
+  const tags = Array.from(document.querySelectorAll('.tag'));
+  const count = document.getElementById('result-count');
+  const empty = document.getElementById('empty-state');
+  const emptyTerm = document.getElementById('empty-term');
+
+  let activeTag = '';
+
+  function apply() {
+    const query = (input?.value ?? '').trim().toLowerCase();
+    let visible = 0;
+
+    cards.forEach((card) => {
+      const haystack = card.dataset.search ?? '';
+      const cardTags = (card.dataset.tags ?? '').split(' ');
+      const matchesQuery = !query || haystack.includes(query);
+      const matchesTag = !activeTag || cardTags.includes(activeTag);
+      const show = matchesQuery && matchesTag;
+
+      card.classList.toggle('is-hidden', !show);
+      if (show) visible += 1;
+    });
+
+    if (count) count.textContent = `Showing ${visible} of ${cards.length}`;
+
+    const isEmpty = visible === 0;
+    empty?.classList.toggle('hidden', !isEmpty);
+    if (grid) grid.style.display = isEmpty ? 'none' : '';
+    if (emptyTerm) emptyTerm.textContent = query || activeTag || 'that';
+  }
+
+  input?.addEventListener('input', apply);
+
+  tags.forEach((button) => {
+    button.addEventListener('click', () => {
+      activeTag = button.dataset.tag ?? '';
+      tags.forEach((t) => t.classList.toggle('is-active', t === button));
+      apply();
+    });
+  });
+
+  // `/` focuses the search box, Escape clears it.
+  document.addEventListener('keydown', (event) => {
+    if (event.key === '/' && document.activeElement !== input) {
+      event.preventDefault();
+      input?.focus();
+    }
+    if (event.key === 'Escape' && document.activeElement === input) {
+      input.value = '';
+      apply();
+    }
+  });
+
+  apply();
+</script>

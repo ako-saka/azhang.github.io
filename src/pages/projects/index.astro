@@ -1,0 +1,42 @@
+---
+import Layout from '../../layouts/BaseLayout.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import { groups, projects, projectsIn } from '../../data/projects.js';
+
+const liveCount = projects.filter((p) => p.status === 'live').length;
+---
+
+<Layout title="Work" description="Research tools, interactive experiments and shipped software by Aine Zhang.">
+  <PageHeader
+    eyebrow="Work"
+    title="Everything I've built"
+    lede={`${projects.length} projects, ${liveCount} of them finished. Grouped by why they exist rather than what they were made with.`}
+  />
+
+  {groups.map((group) => {
+    const list = projectsIn(group.id);
+    if (!list.length) return null;
+    return (
+      <section class="section" id={group.id}>
+        <div class="section-head" data-reveal="0">
+          <div>
+            <p class="eyebrow">
+              {group.title}
+              <span class="count">— {list.length} {list.length === 1 ? 'project' : 'projects'}</span>
+            </p>
+            <h2>{group.blurb}</h2>
+          </div>
+        </div>
+
+        <div class="card-grid">
+          {list.map((project, i) => <ProjectCard project={project} index={i} />)}
+        </div>
+      </section>
+    );
+  })}
+</Layout>
+
+<style>
+  .count { color: var(--ink-faint); opacity: 0.7; }
+</style>

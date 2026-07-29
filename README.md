@@ -1,58 +1,76 @@
-# Aine Zhang — Astro Site
+# Aine Zhang — personal site
 
-This repository contains an Astro website. To publish to GitHub Pages we build the site and place the generated files in `docs/` so GitHub Pages can serve them.
+An Astro static site with a GSAP-driven parallax grid hero (React Bits' `GridMotion`).
+Dark theme, motion-forward, deployed to GitHub Pages.
 
-Entry file
-- When deployed from the `docs/` folder the entry is `docs/index.html` (generated after running the build).
+**Live:** https://ako-saka.github.io/azhang/
 
-Local build & preview
+---
+
+## Editing the content
+
+Almost everything you'd want to change lives in two files. Look for `>>> CUSTOMIZE`
+comments — those mark the spots I filled with placeholders.
+
+| What | Where |
+|---|---|
+| Name, role, tagline, location, socials, nav, skills, interests, resume | [src/data/site.js](src/data/site.js) |
+| Projects (cards + their detail pages) | [src/data/projects.js](src/data/projects.js) |
+| Colours, type, spacing — the whole design system | [src/styles/global.css](src/styles/global.css) |
+| The hero grid tiles | `gridItems` at the top of [src/pages/index.astro](src/pages/index.astro) |
+| Photos | [src/images/](src/images/) — imported and resized at build time |
+
+Adding a project is one entry in `src/data/projects.js`; the card on `/projects` and the
+page at `/projects/<slug>` are both generated from it. Paragraphs starting with `>>>` render
+as a visible "note to self" callout, so unfinished copy never reads as real.
+
+Drop a PDF at `public/aine-zhang-resume.pdf` to activate the resume download button.
+
+## Local development
+
 ```bash
 npm install
-npm run build:docs
-npm run preview -- --host 0.0.0.0
+npm run dev        # http://localhost:4321/azhang/
+npm run build      # -> dist/
+npm run build:docs # -> dist/ then copies to docs/
 ```
 
-Automatic deployment
-- A GitHub Actions workflow is included at `.github/workflows/deploy.yml`. On push to `main` it will build the site and publish the `docs/` folder to the `gh-pages` branch using the repository `GITHUB_TOKEN`.
+The dev URL includes `/azhang` because of the `base` setting — see below.
 
-If you prefer publishing directly from the `docs/` folder on the `main` branch, enable GitHub Pages in the repository settings and select `main`/`docs` as the publishing source.
-# Aine Zhang Personal Website
+## Structure
 
-## Introduction
-This repository contains a personal website for Aine Zhang. It is built using HTML and CSS and includes a homepage with a full-width banner, navigation tabs, a projects section, an interests page, a resume page, and a contact section.
+```
+src/
+  components/   GridMotion (React + GSAP), ProjectCard, PageHeader
+  data/         site.js, projects.js  <- content lives here
+  images/       source photos, optimised at build time
+  layouts/      BaseLayout.astro (head, nav, footer, scroll-reveal)
+  lib/url.js    withBase() — always use this for internal links
+  pages/        index, about, interests, resume, contact, 404,
+                projects/index + projects/[slug]
+  styles/       global.css
+public/         favicon.svg, .nojekyll, (put your resume PDF here)
+```
 
-The site is designed to be simple, modern, and easy to extend with more pages and content.
+## Deployment
 
-## Current Progress
-- Homepage with baby-blue background and centered hero content
-- Top navigation with links to Projects, Interests, Resume, and Contactme
-- Full-width banner-style photo placeholder on the homepage
-- Projects section with two rows of clickable red boxes linking to individual project pages
-- Interests page with Professional/Academic and Hobbies sections
-- Contact section with phone, email, LinkedIn, GitHub, and Instagram details
-- Project 4 page titled "i-ching" with descriptive text and a link to an external site
+Pushing to `main` triggers [.github/workflows/deploy.yml](.github/workflows/deploy.yml),
+which builds the site, copies it into `docs/`, and publishes that to the `gh-pages` branch.
 
-## Progress Tracker
-- [x] Set up basic website files: `index.html` and `style.css`
-- [x] Add navigation and contact section
-- [x] Add project pages and homepage project grid
-- [x] Update Interests page with hidden hobby content reveal behavior
-- [x] Update Project 4 page with title and external link
-- [ ] Add Resume content
-- [ ] Add more project details and images
-- [ ] Improve responsive design and animations
+Three things this setup depends on — worth knowing before you change them:
 
-## Notes
-This README will be updated each time the site receives a new change so progress remains tracked in one place.
+- **`base: '/azhang'`** in [astro.config.mjs](astro.config.mjs). The repo isn't named
+  `ako-saka.github.io`, so Pages serves from a sub-path. Every internal link goes through
+  `withBase()` for this reason. Moving to a custom domain? Set `base: '/'`, update `site`,
+  and add a `public/CNAME`.
+- **`public/.nojekyll`.** Without it GitHub runs Jekyll, which ignores any directory
+  starting with an underscore — including `_astro/`, i.e. all the CSS and JS.
+- **Redirect targets include the base manually.** Astro doesn't prefix them for you.
 
-## Astro Migration
-- [x] Convert site to Astro
-- [x] Add shared layout and navigation
-- [x] Add homepage with projects grid and contact section
-- [x] Add interests and resume pages
-- [x] Add degdp and iching pages
+## Accessibility & performance notes
 
-## Local Development
-- Install dependencies: `npm install`
-- Start dev server: `npm run dev`
-- Build for production: `npm run build`
+- All motion respects `prefers-reduced-motion` — the grid holds still, reveals cut instead
+  of sliding, the marquee stops.
+- Scroll-reveal styles are scoped under `.js`, so content is visible if JavaScript fails.
+- Photos are resized and re-encoded to WebP at build time (~25–50 KB each).
+- Only the hero ships React; every other page is static HTML with a small inline script.

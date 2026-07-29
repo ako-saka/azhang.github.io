@@ -1,86 +1,220 @@
 ---
-const nav = [
-  { href: '/#projects', label: 'Projects' },
-  { href: '/interests', label: 'Interests' },
-  { href: '/contact', label: 'Contact Me' },
-];
+import '../styles/global.css';
+import { nav, site, socials } from '../data/site.js';
+import { withBase, isActive } from '../lib/url.js';
+
+const {
+  title,
+  description = site.tagline,
+  bleed = false, // set true when the page starts with a full-bleed hero
+} = Astro.props;
+
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
+const pathname = Astro.url.pathname;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://ako-saka.github.io').href;
+const year = new Date().getFullYear();
+
+const navItems = nav.map((item) => {
+  const href = withBase(item.href);
+  return { ...item, href, current: isActive(href, pathname) };
+});
 ---
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aine Zhang</title>
-    <link rel="stylesheet" href="/styles.css" />
-    <style>
-      .topbar {
-        display: flex;
-        justify-content: flex-end;
-        align-items: flex-start;
-        padding: 20px 32px;
-        position: sticky;
-        top: 0;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(14px);
-        z-index: 10;
-      }
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
 
-      .topbar-right {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 12px;
-      }
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#07060c" />
 
-      .brand {
-        font-weight: 900;
-        letter-spacing: 0.12em;
-        font-size: 1rem;
-      }
+    <!-- Marks JS as available before first paint, so scroll-reveal styles only
+         apply when something can actually un-hide them. -->
+    <script is:inline>document.documentElement.classList.add('js');</script>
 
-      nav {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        gap: 12px;
-      }
-
-      .tab {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 10px 18px;
-        border-radius: 999px;
-        background: rgba(15, 34, 59, 0.08);
-        color: #0f223b;
-        text-decoration: none;
-        font-weight: 700;
-        transition: background 0.2s ease, color 0.2s ease;
-      }
-
-      .tab:hover {
-        background: rgba(15, 34, 59, 0.16);
-      }
-
-      .tab:focus-visible {
-        outline: 2px solid rgba(15, 34, 59, 0.35);
-        outline-offset: 3px;
-      }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap"
+    />
   </head>
+
   <body>
-    <header class="topbar">
-      <div class="topbar-right">
-        <div class="brand">Aine Zhang</div>
-        <nav>
-          {nav.map((item) => (
-            <a class="tab" href={item.href}>{item.label}</a>
+    <div class="ambient"></div>
+    <div class="grain"></div>
+
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="topbar" id="topbar" data-stuck="false">
+      <div class="topbar-inner">
+        <a class="brand" href={withBase('/')}>
+          <span class="brand-dot"></span>
+          {site.name}
+        </a>
+
+        <button
+          class="nav-toggle"
+          id="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          aria-label="Toggle navigation"
+        >
+          <span></span><span></span><span></span>
+        </button>
+
+        <nav class="nav" id="site-nav" data-open="false">
+          {navItems.map((item) => (
+            <a class="tab" href={item.href} aria-current={item.current ? 'page' : undefined}>
+              {item.label}
+            </a>
           ))}
         </nav>
       </div>
     </header>
-    <main>
+
+    <main id="main" class={bleed ? '' : 'shell'}>
       <slot />
     </main>
+
+    <footer class="footer">
+      <div class="shell">
+        <div class="footer-inner">
+          <div>
+            <p class="eyebrow">Say hello</p>
+            <p class="footer-mark grad">Let’s make<br />something.</p>
+          </div>
+
+          <div>
+            <p class="eyebrow">Elsewhere</p>
+            <ul class="footer-links">
+              {socials.map((s) => (
+                <li>
+                  <a href={s.href} rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined} target={s.href.startsWith('http') ? '_blank' : undefined}>
+                    <span>{s.label}</span>
+                    <span aria-hidden="true">↗</span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <p class="eyebrow">Pages</p>
+            <ul class="footer-links">
+              {navItems.map((item) => (
+                <li><a href={item.href}>{item.label}</a></li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-base">
+          <span>© {year} {site.name}</span>
+          <span>Built with Astro, GSAP &amp; too much coffee.</span>
+        </div>
+      </div>
+    </footer>
+
+    <style>
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0.75rem;
+        z-index: 100;
+        padding: 0.7rem 1.1rem;
+        border-radius: 999px;
+        background: var(--ink);
+        color: #07060c;
+        font-weight: 600;
+        text-decoration: none;
+      }
+
+      .skip-link:focus {
+        left: 1rem;
+      }
+
+      main.shell {
+        min-height: 55vh;
+      }
+    </style>
+
+    <script>
+      // --- sticky nav state -------------------------------------------------
+      const topbar = document.getElementById('topbar');
+      const onScroll = () => {
+        topbar?.setAttribute('data-stuck', String(window.scrollY > 24));
+      };
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+
+      // --- mobile nav -------------------------------------------------------
+      const toggle = document.getElementById('nav-toggle');
+      const siteNav = document.getElementById('site-nav');
+
+      const setNav = (open: boolean) => {
+        toggle?.setAttribute('aria-expanded', String(open));
+        siteNav?.setAttribute('data-open', String(open));
+      };
+
+      toggle?.addEventListener('click', () => {
+        setNav(siteNav?.getAttribute('data-open') !== 'true');
+      });
+
+      siteNav?.addEventListener('click', (event) => {
+        if (event.target instanceof HTMLAnchorElement) setNav(false);
+      });
+
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') setNav(false);
+      });
+
+      // --- scroll reveal ----------------------------------------------------
+      const revealables = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      if (reduced || !('IntersectionObserver' in window)) {
+        revealables.forEach((el) => el.classList.add('is-visible'));
+      } else {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            });
+          },
+          { rootMargin: '0px 0px -12% 0px', threshold: 0.08 }
+        );
+
+        revealables.forEach((el, i) => {
+          // Stagger siblings so grids cascade instead of popping in together.
+          const index = Number(el.getAttribute('data-reveal')) || i % 6;
+          el.style.setProperty('--reveal-delay', `${Math.min(index, 8) * 70}ms`);
+          observer.observe(el);
+        });
+      }
+
+      // --- cursor glow on cards --------------------------------------------
+      if (!reduced && window.matchMedia('(hover: hover)').matches) {
+        document.querySelectorAll<HTMLElement>('.card').forEach((card) => {
+          card.addEventListener('pointermove', (event: PointerEvent) => {
+            const rect = card.getBoundingClientRect();
+            card.style.setProperty('--mx', `${event.clientX - rect.left}px`);
+            card.style.setProperty('--my', `${event.clientY - rect.top}px`);
+          });
+        });
+      }
+    </script>
   </body>
 </html>

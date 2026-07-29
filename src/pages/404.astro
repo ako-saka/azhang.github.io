@@ -1,0 +1,32 @@
+---
+import Layout from '../layouts/BaseLayout.astro';
+import { withBase } from '../lib/url.js';
+---
+
+<Layout title="Not found" description="That page doesn’t exist.">
+  <section class="lost">
+    <p class="eyebrow">Error 404</p>
+    <h1 class="grad">You’ve wandered<br />off the grid.</h1>
+    <p class="lede">
+      This page doesn’t exist — or it did once and I moved it. Either way, the good stuff
+      is a click away.
+    </p>
+    <div class="lost-actions">
+      <a class="btn" href={withBase('/')}>Back home <span class="btn-arrow" aria-hidden="true">↗</span></a>
+      <a class="btn btn-ghost" href={withBase('/projects')}>See the work</a>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .lost {
+    min-height: 62vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-block: clamp(4rem, 12vh, 8rem);
+  }
+
+  .lost h1 { margin-bottom: 1.5rem; }
+  .lost-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 2.25rem; }
+</style>

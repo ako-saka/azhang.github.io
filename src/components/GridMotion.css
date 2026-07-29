@@ -1,96 +1,144 @@
-.noscroll {
-  height: 100%;
-  width: 100%;
-  overflow: hidden;
-}
+/* ==========================================================================
+   GridMotion — a rotated 4×7 tile grid whose rows track the cursor with
+   staggered inertia. Rendered as a background layer; it fills its parent,
+   so the parent must be `position: relative` and have a height.
+   ========================================================================== */
 
-.intro {
-  width: 100%;
-  height: 64vh;
-  max-height: 640px;
+.gm {
+  position: absolute;
+  inset: 0;
   overflow: hidden;
-  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.intro::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-size: 250px;
   pointer-events: none;
-  z-index: 4;
+  user-select: none;
 }
 
-.gridMotion-container {
-  gap: 1rem;
-  flex: none;
+/* radial wash behind the tiles */
+.gm-glow {
+  position: absolute;
+  inset: -10%;
+  z-index: 0;
+}
+
+.gm-container {
   position: relative;
-  width: 120vw;
-  height: 100%;
+  z-index: 1;
+  flex: none;
+  width: 165vw;
+  height: 150vh;
   display: grid;
   grid-template-rows: repeat(4, 1fr);
   grid-template-columns: 100%;
+  gap: 1rem;
   transform: rotate(-15deg);
   transform-origin: center center;
-  z-index: 2;
 }
 
-.row {
+.gm-row {
   display: grid;
   gap: 1rem;
   grid-template-columns: repeat(7, 1fr);
-  will-change: transform, filter;
+  will-change: transform;
 }
 
-.row__item {
-  position: relative;
-}
+.gm-cell { position: relative; }
 
-.row__item-inner {
+.gm-tile {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  border-radius: 10px;
-  background-color: #111;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #100d1a;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
-  font-size: 1.5rem;
+  text-align: center;
+  color: var(--ink, #f4f2ff);
 }
 
-.row__item-img {
-  width: 100%;
-  height: 100%;
+.gm-tile-img {
+  position: absolute;
+  inset: 0;
   background-size: cover;
   background-position: 50% 50%;
+  filter: saturate(0.85) contrast(1.05);
+}
+
+/* image tiles get a slight tint so they sit in the palette */
+.gm-tile[data-kind='image']::after {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
+  inset: 0;
+  background: linear-gradient(140deg, rgba(139, 92, 255, 0.28), rgba(255, 77, 109, 0.16));
+  mix-blend-mode: color;
 }
 
-.row__item-content {
-  padding: 1rem;
-  text-align: center;
-  z-index: 1;
-}
-
-.fullview {
+.gm-tile-label {
   position: relative;
-  width: 100%;
-  height: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
+  z-index: 1;
+  padding: 0.85rem 1rem;
+  font-family: var(--font-display, sans-serif);
+  font-size: clamp(0.8rem, 1.15vw, 1.15rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
 }
 
-.fullview .row__item-inner {
-  border-radius: 0px;
+/* --- tile variants -------------------------------------------------------- */
+/* Solid tiles are deliberately muted — they are wallpaper, not content, and at
+   full saturation they compete with the hero headline sitting on top. */
+.gm-tile[data-kind='solid'] { color: rgba(11, 7, 16, 0.9); border-color: transparent; }
+.gm-tile[data-tone='a'][data-kind='solid'] { background: linear-gradient(150deg, #a83350, #a8523c); }
+.gm-tile[data-tone='b'][data-kind='solid'] { background: linear-gradient(150deg, #5b3ca8, #3c5aa8); }
+.gm-tile[data-tone='c'][data-kind='solid'] { background: linear-gradient(150deg, #2a9483, #379a6f); }
+
+.gm-tile[data-kind='outline'] {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+.gm-tile[data-kind='outline'] .gm-tile-label { color: rgba(244, 242, 255, 0.72); }
+
+.gm-tile[data-kind='glyph'] {
+  background: #0c0a14;
+  font-size: clamp(1.4rem, 3vw, 2.6rem);
+}
+
+.gm-tile[data-kind='mono'] { background: #0c0a14; }
+
+.gm-tile[data-kind='mono'] .gm-tile-label {
+  font-family: var(--font-mono, monospace);
+  font-size: clamp(0.62rem, 0.85vw, 0.85rem);
+  font-weight: 400;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(179, 174, 203, 0.85);
+}
+
+/* --- readability veil ----------------------------------------------------- */
+/* Dims the middle so hero copy stays legible, and fades the grid into the page. */
+.gm-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(52% 55% at 50% 46%, rgba(7, 6, 12, 0.97) 0%, rgba(7, 6, 12, 0.92) 45%, rgba(7, 6, 12, 0.55) 72%, transparent 92%),
+    linear-gradient(180deg, rgba(7, 6, 12, 0.82) 0%, rgba(7, 6, 12, 0.3) 24%, rgba(7, 6, 12, 0.35) 55%, var(--bg, #07060c) 97%);
+  backdrop-filter: blur(1.5px);
+}
+
+@media (max-width: 720px) {
+  .gm-container { width: 260vw; height: 130vh; gap: 0.6rem; }
+  .gm-row { gap: 0.6rem; }
+  .gm-tile { border-radius: 10px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gm-container { transform: rotate(-15deg) !important; }
+  .gm-row { transform: none !important; }
 }

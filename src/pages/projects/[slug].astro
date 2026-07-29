@@ -1,0 +1,218 @@
+---
+import Layout from '../../layouts/BaseLayout.astro';
+import { projects } from '../../data/projects.js';
+import { withBase } from '../../lib/url.js';
+
+export function getStaticPaths() {
+  return projects.map((project, index) => ({
+    params: { slug: project.slug },
+    props: {
+      project,
+      prev: projects[(index - 1 + projects.length) % projects.length],
+      next: projects[(index + 1) % projects.length],
+    },
+  }));
+}
+
+const { project, prev, next } = Astro.props;
+
+const statusLabel = { live: 'Live', wip: 'In progress', archived: 'Archived' };
+const meta = [
+  { label: 'Year', value: project.year },
+  { label: 'Role', value: project.role },
+  { label: 'Team', value: project.team },
+];
+
+// Paragraphs starting with `>>>` are authoring notes — rendered as a visible
+// TODO callout instead of body copy so nothing placeholder-y reads as real.
+const isNote = (text) => text.trim().startsWith('>>>');
+---
+
+<Layout title={project.title} description={project.summary}>
+  <article data-accent={project.accent}>
+    <a class="back" href={withBase('/projects')}>
+      <span aria-hidden="true">←</span> All work
+    </a>
+
+    <header class="project-header">
+      <p class="eyebrow">{project.kicker}</p>
+      <h1>{project.title}</h1>
+      <p class="lede">{project.summary}</p>
+
+      <div class="tag-row">
+        <span class="status" data-status={project.status}>{statusLabel[project.status]}</span>
+        {project.tags.map((tag) => <span class="chip">{tag}</span>)}
+      </div>
+
+      {project.links.length > 0 && (
+        <div class="link-row">
+          {project.links.map((link) => (
+            <a class="btn" href={link.href} target="_blank" rel="noopener noreferrer">
+              {link.label} <span class="btn-arrow" aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      )}
+    </header>
+
+    <div class="project-body">
+      <aside class="project-meta" data-reveal="0">
+        {meta.map((row) => (
+          <div class="meta-row">
+            <dt>{row.label}</dt>
+            <dd>{row.value}</dd>
+          </div>
+        ))}
+      </aside>
+
+      <div class="prose project-prose" data-reveal="1">
+        {project.body.map((paragraph) =>
+          isNote(paragraph) ? (
+            <p class="note">
+              <strong>Note to self —</strong> {paragraph.replace(/^>>>\s*CUSTOMIZE:\s*/i, '')}
+            </p>
+          ) : (
+            <p>{paragraph}</p>
+          )
+        )}
+      </div>
+    </div>
+
+    <nav class="project-nav">
+      <a class="project-nav-link" href={withBase(`/projects/${prev.slug}`)}>
+        <span class="project-nav-label"><span aria-hidden="true">←</span> Previous</span>
+        <span class="project-nav-title">{prev.title}</span>
+      </a>
+      <a class="project-nav-link is-next" href={withBase(`/projects/${next.slug}`)}>
+        <span class="project-nav-label">Next <span aria-hidden="true">→</span></span>
+        <span class="project-nav-title">{next.title}</span>
+      </a>
+    </nav>
+  </article>
+</Layout>
+
+<style>
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 3rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color 0.25s var(--ease), gap 0.25s var(--ease);
+  }
+
+  .back:hover { color: var(--ink); gap: 0.85rem; }
+
+  .project-header {
+    padding-block: 2rem clamp(2.5rem, 6vh, 4rem);
+    border-bottom: 1px solid var(--line);
+    animation: header-in 0.8s var(--ease) both;
+  }
+
+  @keyframes header-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: none; }
+  }
+
+  .project-header h1 {
+    font-size: clamp(2.75rem, 9vw, 6rem);
+    margin-bottom: 1.25rem;
+  }
+
+  .tag-row,
+  .link-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: 1.75rem;
+  }
+
+  .project-body {
+    display: grid;
+    grid-template-columns: minmax(180px, 240px) 1fr;
+    gap: clamp(2rem, 6vw, 5rem);
+    padding-block: clamp(2.5rem, 6vh, 4rem);
+  }
+
+  .project-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    align-self: start;
+    position: sticky;
+    top: 7rem;
+  }
+
+  .meta-row dt {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+    margin-bottom: 0.35rem;
+  }
+
+  .meta-row dd { margin: 0; color: var(--ink); font-size: 0.95rem; }
+
+  .project-prose { font-size: 1.05rem; }
+
+  .note {
+    margin-top: 1.5rem;
+    padding: 1rem 1.25rem;
+    border-radius: 14px;
+    border: 1px dashed color-mix(in srgb, var(--accent) 55%, transparent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    color: var(--ink-dim);
+    font-size: 0.92rem;
+  }
+
+  .note strong { color: var(--accent); }
+
+  .project-nav {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 1rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+
+  .project-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.4rem 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--glass);
+    text-decoration: none;
+    transition: transform 0.35s var(--ease), border-color 0.35s var(--ease);
+  }
+
+  .project-nav-link:hover { transform: translateY(-3px); border-color: var(--line-strong); }
+  .project-nav-link.is-next { text-align: right; align-items: flex-end; }
+
+  .project-nav-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--ink-faint);
+  }
+
+  .project-nav-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 780px) {
+    .project-body { grid-template-columns: 1fr; }
+    .project-meta { position: static; flex-direction: row; flex-wrap: wrap; gap: 2rem; }
+  }
+</style>

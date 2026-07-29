@@ -1,0 +1,26 @@
+---
+import { withBase } from '../lib/url.js';
+
+const { project, index = 0 } = Astro.props;
+const statusLabel = { live: 'Live', wip: 'In progress', archived: 'Archived' };
+---
+
+<a
+  class="card"
+  href={withBase(`/projects/${project.slug}`)}
+  data-accent={project.accent}
+  data-reveal={index}
+>
+  <div class="card-top">
+    <span class="card-kicker">{project.kicker}</span>
+    <span class="status" data-status={project.status}>{statusLabel[project.status] ?? project.status}</span>
+  </div>
+
+  <h3>{project.title}</h3>
+  <p>{project.summary}</p>
+
+  <div class="card-foot">
+    {project.tags.slice(0, 2).map((tag) => <span class="chip">{tag}</span>)}
+    <span class="card-go" aria-hidden="true">→</span>
+  </div>
+</a>
