@@ -7,6 +7,10 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    # Newer repos default GITHUB_TOKEN to read-only; without this, the push to
+    # gh-pages below fails with a 403/"Permission denied" error.
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout

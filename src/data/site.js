@@ -18,10 +18,10 @@ export const site = {
 };
 
 export const socials = [
-  { label: 'Email', handle: 'aine2007@live.com', href: 'mailto:aine2007@live.com', icon: 'mail' },
+  { label: 'Email', handle: 'ainez@uchicago.edu', href: 'mailto:ainez@uchicago.edu', icon: 'mail' },
   { label: 'GitHub', handle: '@ako-saka', href: 'https://github.com/ako-saka', icon: 'github' },
   // >>> CUSTOMIZE: replace with your real profile URLs (or delete the line).
-  { label: 'LinkedIn', handle: 'in/ainezhang', href: 'https://www.linkedin.com/in/ainezhang', icon: 'linkedin' },
+  { label: 'LinkedIn', handle: 'in/ainezhang', href: 'https://www.linkedin.com/in/ainezhang/', icon: 'linkedin' },
   { label: 'Instagram', handle: '@ainezhang', href: 'https://instagram.com/ainezhang', icon: 'instagram' },
 ];
 
@@ -34,22 +34,22 @@ export const nav = [
   { href: '/contact', label: 'Contact' },
 ];
 
-/** Skill groups shown on the home page and About page. >>> CUSTOMIZE freely. */
+/** Skill groups shown on the home page and About page. */
 export const skills = [
+  {
+    title: 'Research',
+    accent: 'b',
+    items: ['Real analysis & probability', 'Regression & quantitative modeling', 'Optimization', 'Mixed-methods research', 'Sociological theory'],
+  },
   {
     title: 'Build',
     accent: 'a',
-    items: ['JavaScript / TypeScript', 'React', 'Astro', 'Python', 'Node.js', 'Git'],
+    items: ['Python', 'R', 'MATLAB', 'LaTeX', 'Astro / React', 'Introductory C'],
   },
   {
-    title: 'Design',
-    accent: 'b',
-    items: ['UI animation', 'Figma', 'Design systems', 'Typography', 'Prototyping'],
-  },
-  {
-    title: 'Think',
+    title: 'Languages',
     accent: 'c',
-    items: ['Data storytelling', 'Machine learning', 'Research methods', 'Collaborative planning'],
+    items: ['English', 'Mandarin Chinese', 'Japanese (basic)'],
   },
 ];
 
@@ -118,60 +118,71 @@ export const interests = [
 ];
 
 /**
- * Resume. >>> CUSTOMIZE: everything below is placeholder scaffolding —
- * swap in your real education, experience and awards.
+ * Resume. Sourced from Aine's actual CV — the download button is
+ * intentionally disabled, so this is the only place resume content lives.
  */
 export const resume = {
-  // Drop a PDF at `public/aine-zhang-resume.pdf` to turn on the download button. please don't have the download be avaliable
-  pdf: '/aine-zhang-resume.pdf',
   summary:
-    'Student researcher intrested in computational social sciences and occasional mathematics', // >>> CUSTOMIZE
+    'Statistics & Sociology student researching computational social science — from an AI-assisted caregiving tool to a degrowth mod of Stardew Valley.',
   education: [
     {
-      school: 'University of Chicago', // >>> CUSTOMIZE
-      credential: 'B.S. in Statistics, B.A. in Sociology, B.S. in Computational and Applied Mathematics', // >>> CUSTOMIZE
+      school: 'University of Chicago',
+      credential: 'B.S. in Statistics, B.A. in Sociology, B.S. in Computational and Applied Mathematics',
       period: '2024 — 2028',
-      detail: 'Relevant coursework: real analysis, classical political theory, sociological theory, machine learning, human–computer interaction.',
+      detail:
+        'Coursework: real analysis, mathematical probability, regression, quantitative modeling, optimization, classic political philosophy, sociological theory.',
     },
   ],
   experience: [
     {
-      org: 'University of Hong Kong',
-      role: 'Research Intern',
-      period: 'Summer 2025',
-      detail: 'Developing a RAG multiagent tool for dementia patients and caregivers.',
-      tags: ['TODO'],
+      org: 'Data-Informed iSupport for Dementia Carers',
+      role: 'Researcher',
+      period: 'May 2026 — Present',
+      detail:
+        'Co-designing and evaluating an AI-powered virtual assistant that adapts the WHO’s iSupport framework for Chinese family caregivers of people living with dementia — Hong Kong, China. Mixed-methods research including interviews and questionnaires on user acceptance and adoption.',
+      tags: ['Mixed methods', 'HCI', 'AI'],
     },
     {
-      org: 'DeGDP: Degrowth as a Game Design Problem', // >>> CUSTOMIZE
-      role: 'Project Developer',
-      period: '2025 - 2026',
+      org: 'Degrowth as a Game Design Problem',
+      role: 'Researcher',
+      period: 'Jun 2025 — Present',
       detail:
-        'Built client-facing web projects in a small team, including the deGDP research tool and the I-Ching interactive.',
-      tags: [],
-    }
+        'Co-developing a critical mod of Stardew Valley to study character progression alongside financial degrowth — bridging environmental studies and economics with game design and speculative futures. Leading statistical analysis and impact measurement — Chicago, IL.',
+      tags: ['Game design', 'Statistical analysis'],
+    },
+    {
+      org: 'Women’s Business Development Center',
+      role: 'Archivist',
+      period: 'Sept 2025 — Mar 2026',
+      detail:
+        'Catalogued archives uncovering key moments in WBDC’s history and co-led an oral history project with UChicago Special Collections, UIC Archives, and the Chicago Women’s History Center — Chicago, IL.',
+      tags: ['Archives', 'Oral history'],
+    },
+    {
+      org: 'Structure Therapeutics',
+      role: 'Operational Intern',
+      period: 'Aug 2024 — Sept 2024',
+      detail:
+        'Built and maintained centralized databases for scientific publications, doubling search efficiency; digitized HR and finance files — San Francisco, CA.',
+      tags: ['Databases', 'Operations'],
+    },
+  ],
+  activities: [
+    { org: 'UChicago Mahjong Club', role: 'Social Chair & Co-Founder', period: 'Oct 2024 — Present' },
+    { org: 'Doc Films at UChicago', role: 'Volunteer', period: 'Jun 2025 — Present' },
+    { org: 'Kappa Theta Pi Professional Technology Fraternity', role: 'Pledge', period: 'Apr 2026 — Present' },
+    { org: 'Chicago Journal of Sociology', role: 'Editor', period: 'Sept 2024 — May 2025' },
   ],
   awards: [
-    { title: 'Add an award, scholarship or hackathon placement', period: '2025' }, // >>> CUSTOMIZE
-  ],
-    experience: [
     {
-      org: 'Kappa The', // >>> CUSTOMIZE
-      role: 'Project Developer',
-      period: '2024 — present',
-      detail:
-        'Built client-facing web projects in a small team, including the deGDP research tool and the I-Ching interactive.',
-      tags: ['React', 'Astro', 'Team of 3'],
+      title: 'Quad Undergraduate Research Scholar',
+      period: '2025 — 2026',
+      detail: 'Competitive research grant supporting interdisciplinary undergraduate research initiatives.',
     },
     {
-      org: 'Your Internship',
-      role: 'Software Engineering Intern',
-      period: 'Summer 2025',
-      detail: 'Describe the work, the stack, and one measurable outcome.',
-      tags: ['TODO'],
+      title: 'College Summer Institute Scholar',
+      period: '2025',
+      detail: 'Selected for an advanced humanities & arts research program as 1 of 2 first-years; presented at the Summer Undergraduate Symposium.',
     },
-  ],
-  awards: [
-    { title: 'Add an award, scholarship or hackathon placement', period: '2025' }, // >>> CUSTOMIZE
   ],
 };

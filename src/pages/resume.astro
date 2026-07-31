@@ -2,22 +2,17 @@
 import Layout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import { resume, skills, socials } from '../data/site.js';
-import { withBase } from '../lib/url.js';
 
 const email = socials.find((s) => s.label === 'Email');
 ---
 
 <Layout title="Resume" description="Education, experience and skills.">
   <PageHeader eyebrow="Resume" title="The structured version." lede={resume.summary} accent="a">
-    <div class="header-actions">
-      <a class="btn" href={withBase(resume.pdf)} download>
-        Download PDF <span class="btn-arrow" aria-hidden="true">↓</span>
-      </a>
-      {email && <a class="btn btn-ghost" href={email.href}>Email me</a>}
-    </div>
-    <p class="pdf-note">
-      The download works once you drop your CV at <code>public{resume.pdf}</code>.
-    </p>
+    {email && (
+      <div class="header-actions">
+        <a class="btn" href={email.href}>Email me <span class="btn-arrow" aria-hidden="true">↗</span></a>
+      </div>
+    )}
   </PageHeader>
 
   <section class="section">
@@ -89,11 +84,34 @@ const email = socials.find((s) => s.label === 'Email');
     </div>
   </section>
 
+  {resume.activities?.length > 0 && (
+    <section class="section">
+      <div class="section-head" data-reveal="0">
+        <div>
+          <p class="eyebrow">04 — Activities</p>
+          <h2>Outside the classroom</h2>
+        </div>
+      </div>
+
+      <ul class="awards">
+        {resume.activities.map((activity, i) => (
+          <li data-reveal={i}>
+            <span>
+              <span class="award-title">{activity.role}</span>
+              <span class="award-org">— {activity.org}</span>
+            </span>
+            <span class="award-year">{activity.period}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
   {resume.awards?.length > 0 && (
     <section class="section">
       <div class="section-head" data-reveal="0">
         <div>
-          <p class="eyebrow">04 — Recognition</p>
+          <p class="eyebrow">05 — Recognition</p>
           <h2>Awards</h2>
         </div>
       </div>
@@ -101,7 +119,10 @@ const email = socials.find((s) => s.label === 'Email');
       <ul class="awards">
         {resume.awards.map((award, i) => (
           <li data-reveal={i}>
-            <span>{award.title}</span>
+            <span>
+              <span class="award-title">{award.title}</span>
+              {award.detail && <span class="award-detail">{award.detail}</span>}
+            </span>
             <span class="award-year">{award.period}</span>
           </li>
         ))}
@@ -116,21 +137,6 @@ const email = socials.find((s) => s.label === 'Email');
     flex-wrap: wrap;
     gap: 0.75rem;
     margin-top: 2rem;
-  }
-
-  .pdf-note {
-    margin-top: 1rem;
-    font-size: 0.82rem;
-    color: var(--ink-faint);
-  }
-
-  .pdf-note code {
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    padding: 0.15rem 0.4rem;
-    border-radius: 6px;
-    background: var(--glass-hi);
-    color: var(--ink-dim);
   }
 
   .timeline {
@@ -231,6 +237,23 @@ const email = socials.find((s) => s.label === 'Email');
     gap: 1.5rem;
     padding-block: 1.15rem;
     border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+
+  .awards li > span:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .award-title { font-weight: 500; }
+  .award-org { color: var(--ink-faint); font-weight: 400; }
+
+  .award-detail {
+    color: var(--ink-dim);
+    font-size: 0.9rem;
+    font-weight: 400;
+    max-width: 56ch;
   }
 
   .award-year {
