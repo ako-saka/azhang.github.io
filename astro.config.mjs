@@ -1,13 +1,15 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 
-// The repo is `ako-saka/azhang.github.io` — GitHub's special "user site" name,
-// which serves at the domain root: https://ako-saka.github.io/
+// GitHub only serves Pages from the domain root when the repo name matches
+// the OWNER's username exactly (e.g. owner `ako-saka` + repo `ako-saka.github.io`).
+// This repo is `ako-saka/azhang.github.io` — the names don't match, so despite
+// the `.github.io` name it's an ordinary project repo, served from a sub-path
+// at the repo's own name: https://ako-saka.github.io/azhang.github.io/
 //
-// >>> CUSTOMIZE: if you ever rename the repo back to something like `azhang`
-// (a regular project repo), Pages instead serves from a sub-path and this
-// needs to go back to `base: '/azhang'`.
-const base = '/';
+// >>> CUSTOMIZE: if you rename the repo to exactly `ako-saka.github.io`, Pages
+// switches to serving from the domain root and this must become `base: '/'`.
+const base = '/azhang.github.io';
 const prefix = base === '/' ? '' : base;
 
 export default defineConfig({

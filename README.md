@@ -3,7 +3,7 @@
 An Astro static site with a GSAP-driven parallax grid hero (React Bits' `GridMotion`).
 Dark theme, motion-forward, deployed to GitHub Pages.
 
-**Live:** https://ako-saka.github.io/
+**Live:** https://ako-saka.github.io/azhang.github.io/
 
 ---
 
@@ -28,7 +28,7 @@ as a visible "note to self" callout, so unfinished copy never reads as real.
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321/
+npm run dev        # http://localhost:4321/azhang.github.io/
 npm run build      # -> dist/
 npm run build:docs # -> dist/ then copies to docs/
 ```
@@ -64,11 +64,13 @@ shows GitHub's own "Site not found" page, check this first.
 
 Four things this setup depends on — worth knowing before you change them:
 
-- **`base: '/'`** in [astro.config.mjs](astro.config.mjs). The repo is named
-  `ako-saka.github.io` — GitHub's special "user site" name — so Pages serves from the
-  domain root, not a sub-path. Every internal link goes through `withBase()` for this
-  reason, so if you ever rename the repo to something ordinary (e.g. back to `azhang`),
-  Pages goes back to serving from `/azhang/` and this needs to become `base: '/azhang'` again.
+- **`base: '/azhang.github.io'`** in [astro.config.mjs](astro.config.mjs). GitHub only
+  serves Pages from the domain root when the repo name matches the *owner's username*
+  exactly (`ako-saka` + repo `ako-saka.github.io`). This repo is `ako-saka/azhang.github.io`
+  — despite the `.github.io` name, the names don't match, so it's an ordinary project repo
+  served from a sub-path at the repo's own name. Every internal link goes through
+  `withBase()` for this reason. If the repo is ever renamed to exactly
+  `ako-saka.github.io`, Pages switches to the domain root and this must become `base: '/'`.
 - **`public/.nojekyll`.** Without it GitHub runs Jekyll, which ignores any directory
   starting with an underscore — including `_astro/`, i.e. all the CSS and JS.
 - **`permissions: contents: write`** in the workflow. Newer repos default `GITHUB_TOKEN`
