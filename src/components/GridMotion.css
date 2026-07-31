@@ -57,7 +57,9 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--ink, #eef6f6);
+  /* Hardcoded, not var(--ink) — this tile wallpaper is deliberately dark
+     regardless of the page theme, so its text must stay independently light. */
+  color: #eef6f6;
 }
 
 .gm-tile-img {

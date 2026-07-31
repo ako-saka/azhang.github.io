@@ -41,7 +41,11 @@ export default function StaggeredMenu({
   className,
   brandLabel = '',
   brandHref = '/',
-  menuButtonColor = '#eef6f6',
+  // 'dark' = the header sits on a dark section (the homepage hero) and needs
+  // light text + a dark scrim; 'light' = it sits directly on the page's white
+  // background and needs dark text + a light scrim.
+  theme = 'light',
+  menuButtonColor = '#0a1620',
   openMenuButtonColor = '#04101c',
   accentColor = '#00f5c8',
   changeMenuColorOnOpen = true,
@@ -322,6 +326,7 @@ export default function StaggeredMenu({
       style={accentColor ? { '--sm-accent': accentColor } : undefined}
       data-position={position}
       data-open={open || undefined}
+      data-theme={theme}
     >
       <div ref={preLayersRef} className="sm-prelayers" aria-hidden="true">
         {(() => {

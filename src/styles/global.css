@@ -1,28 +1,32 @@
 /* ==========================================================================
    Aine Zhang — design system
-   Chilly, casual blue. Dark cobalt-navy surface, one flashy mint pop accent
-   (#00F5C8), understated otherwise. Tokens first, then components.
+   Bright, white-based surface with a chilly blue/mint accent pair. One
+   deliberately dark exception: the homepage hero (see .hero in index.astro),
+   which scopes its own dark-mode token overrides since it sits on the
+   GridMotion tile background rather than the page's white surface.
    ========================================================================== */
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
   /* --- surface ---------------------------------------------------------- */
-  --bg: #050b14;
-  --bg-2: #0a1826;
-  --ink: #eef6f6;
-  --ink-dim: #9fb9c4;
-  --ink-faint: #5f7c8a;
-  --line: rgba(150, 210, 220, 0.12);
-  --line-strong: rgba(150, 210, 220, 0.26);
-  --glass: rgba(140, 200, 220, 0.05);
-  --glass-hi: rgba(140, 200, 220, 0.09);
+  --bg: #ffffff;
+  --bg-2: #f2f6f7;
+  --ink: #0a1620;
+  --ink-dim: #48626d;
+  --ink-faint: #8298a1;
+  --line: rgba(10, 22, 32, 0.1);
+  --line-strong: rgba(10, 22, 32, 0.22);
+  --glass: rgba(10, 22, 32, 0.03);
+  --glass-hi: rgba(10, 22, 32, 0.06);
   --ink-on-accent: #04101c;
+  --shadow-sm: 0 1px 2px rgba(10, 22, 32, 0.045);
+  --shadow-md: 0 14px 32px rgba(10, 22, 32, 0.07);
 
   /* --- accents ---------------------------------------------------------- */
   --a: #00f5c8; /* flash mint — the pop colour  */
   --b: #3e7bfa; /* cobalt blue                  */
-  --c: #7fd8ff; /* frost blue                   */
+  --c: #2fa8c9; /* deeper frost blue — kept legible on white */
   --accent: var(--a);
 
   /* --- type ------------------------------------------------------------- */
@@ -76,7 +80,7 @@ a { color: inherit; }
 ::selection { background: var(--a); color: var(--ink-on-accent); }
 
 :focus-visible {
-  outline: 2px solid var(--c);
+  outline: 2px solid var(--b);
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -90,9 +94,9 @@ a { color: inherit; }
   z-index: -2;
   pointer-events: none;
   background:
-    radial-gradient(58vw 58vw at 14% -8%, rgba(62, 123, 250, 0.24), transparent 60%),
-    radial-gradient(48vw 48vw at 94% 6%, rgba(0, 245, 200, 0.14), transparent 62%),
-    radial-gradient(70vw 55vw at 50% 108%, rgba(62, 123, 250, 0.14), transparent 65%),
+    radial-gradient(58vw 58vw at 14% -8%, rgba(62, 123, 250, 0.1), transparent 60%),
+    radial-gradient(48vw 48vw at 94% 6%, rgba(0, 245, 200, 0.1), transparent 62%),
+    radial-gradient(70vw 55vw at 50% 108%, rgba(62, 123, 250, 0.06), transparent 65%),
     linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 55%, var(--bg) 100%);
 }
 
@@ -101,8 +105,8 @@ a { color: inherit; }
   inset: -50%;
   z-index: -1;
   pointer-events: none;
-  opacity: 0.35;
-  mix-blend-mode: overlay;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
   animation: grain 5s steps(5) infinite;
 }
@@ -276,11 +280,12 @@ p { text-wrap: pretty; }
   padding: 1.6rem;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
-  background: var(--glass);
+  background: var(--bg);
+  box-shadow: var(--shadow-sm);
   text-decoration: none;
   overflow: hidden;
   isolation: isolate;
-  transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), background 0.45s var(--ease);
+  transition: transform 0.45s var(--ease), border-color 0.45s var(--ease), background 0.45s var(--ease), box-shadow 0.45s var(--ease);
 }
 
 /* cursor-following glow, driven by --mx/--my set in JS */
@@ -298,6 +303,7 @@ p { text-wrap: pretty; }
   transform: translateY(-6px);
   border-color: color-mix(in srgb, var(--accent) 55%, transparent);
   background: var(--glass-hi);
+  box-shadow: var(--shadow-md);
 }
 
 .card:hover::before { opacity: 1; }
@@ -366,7 +372,7 @@ p { text-wrap: pretty; }
   border-radius: 999px;
   font-size: 0.75rem;
   color: var(--ink-dim);
-  background: rgba(255, 255, 255, 0.03);
+  background: var(--glass);
   white-space: nowrap;
 }
 
@@ -395,7 +401,7 @@ p { text-wrap: pretty; }
 }
 
 .status[data-status='live'] { color: var(--c); }
-.status[data-status='wip'] { color: #ffc857; }
+.status[data-status='wip'] { color: #b8790a; }
 
 /* --------------------------------------------------------------------------
    Panels (generic bordered surface)
@@ -405,6 +411,7 @@ p { text-wrap: pretty; }
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--glass);
+  box-shadow: var(--shadow-sm);
 }
 
 .panel-split {
@@ -412,46 +419,6 @@ p { text-wrap: pretty; }
   gap: clamp(1.5rem, 4vw, 3.5rem);
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
   align-items: center;
-}
-
-/* --------------------------------------------------------------------------
-   Marquee
-   -------------------------------------------------------------------------- */
-.marquee {
-  position: relative;
-  overflow: hidden;
-  padding-block: 1.35rem;
-  border-block: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-}
-
-.marquee-track {
-  display: flex;
-  width: max-content;
-  gap: 2.5rem;
-  animation: marquee 32s linear infinite;
-}
-
-.marquee:hover .marquee-track { animation-play-state: paused; }
-
-.marquee-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 2.5rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.1rem, 2.4vw, 1.9rem);
-  letter-spacing: -0.02em;
-  color: var(--ink-faint);
-  white-space: nowrap;
-}
-
-.marquee-item span { color: var(--accent); }
-
-@keyframes marquee {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
 }
 
 /* --------------------------------------------------------------------------
@@ -553,5 +520,4 @@ p { text-wrap: pretty; }
 
   .js [data-reveal] { opacity: 1; transform: none; }
   .grain { animation: none; }
-  .marquee-track { animation: none; }
 }

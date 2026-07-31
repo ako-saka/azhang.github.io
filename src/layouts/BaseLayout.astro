@@ -44,7 +44,7 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#050b14" />
+    <meta name="theme-color" content="#ffffff" />
 
     <!-- Marks JS as available before first paint, so scroll-reveal styles only
          apply when something can actually un-hide them. -->
@@ -75,7 +75,8 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
       brandHref={withBase('/')}
       colors={['#0b2a45', '#00f5c8']}
       accentColor="#00f5c8"
-      menuButtonColor="#eef6f6"
+      theme={bleed ? 'dark' : 'light'}
+      menuButtonColor={bleed ? '#eef6f6' : '#0a1620'}
       openMenuButtonColor="#04101c"
     />
 
@@ -130,8 +131,8 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
         z-index: 100;
         padding: 0.7rem 1.1rem;
         border-radius: 999px;
-        background: var(--ink);
-        color: var(--ink-on-accent);
+        background: #0a1620;
+        color: #ffffff;
         font-weight: 600;
         text-decoration: none;
       }

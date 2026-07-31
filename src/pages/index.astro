@@ -3,25 +3,31 @@ import Layout from '../layouts/BaseLayout.astro';
 import GridMotion from '../components/GridMotion.jsx';
 import ProjectCard from '../components/ProjectCard.astro';
 import { featured } from '../data/projects.js';
-import { site, skills, socials } from '../data/site.js';
+import { site } from '../data/site.js';
 import { withBase } from '../lib/url.js';
 import { getImage } from 'astro:assets';
 import photo1 from '../images/photo-1.jpg';
 import photo2 from '../images/photo-2.jpg';
+import photo3 from '../images/photo-3.jpg';
+import photo4 from '../images/photo-4.jpg';
+import photo5 from '../images/photo-5.jpg';
 
 // Resize + re-encode at build time. The source JPEGs are several megabytes each;
 // these come out around 60–120 KB.
 const tile1 = await getImage({ src: photo1, width: 640, format: 'webp', quality: 70 });
 const tile2 = await getImage({ src: photo2, width: 640, format: 'webp', quality: 70 });
+const tile3 = await getImage({ src: photo3, width: 640, format: 'webp', quality: 70 });
+const tile4 = await getImage({ src: photo4, width: 640, format: 'webp', quality: 70 });
+const tile5 = await getImage({ src: photo5, width: 640, format: 'webp', quality: 70 });
 const PORTRAIT_W = 900;
-const portrait = await getImage({ src: photo1, width: PORTRAIT_W, format: 'webp', quality: 78 });
-const portraitH = Math.round((PORTRAIT_W * photo1.height) / photo1.width);
+const portrait = await getImage({ src: photo4, width: PORTRAIT_W, format: 'webp', quality: 78 });
+const portraitH = Math.round((PORTRAIT_W * photo4.height) / photo4.width);
 
 // 28 tiles = 4 rows × 7 columns. Mix of words, images and glyphs so the grid
 // reads as a collage of what the site is about rather than filler.
 const gridItems = [
   { text: 'research', kind: 'solid', tone: 'b' },
-  { text: 'deGDP', kind: 'outline' },
+  { text: 'DeGDP', kind: 'outline' },
   { image: tile1.src, alt: '' },
   { text: '☯', kind: 'glyph' },
   { text: 'interfaces', kind: 'outline' },
@@ -40,20 +46,18 @@ const gridItems = [
   { text: '📷', kind: 'glyph' },
   { text: 'typography', kind: 'outline' },
   { text: 'Python', kind: 'mono' },
-  { image: tile1.src, alt: '' },
-  { text: 'systems', kind: 'outline' },
+  { image: tile3.src, alt: '' },
+  { image: tile4.src, alt: '' },
   { text: 'build', kind: 'solid', tone: 'b' },
 
   { text: 'curiosity', kind: 'outline' },
   { text: 'TypeScript', kind: 'mono' },
   { text: '🎧', kind: 'glyph' },
   { text: 'storytelling', kind: 'solid', tone: 'c' },
-  { image: tile2.src, alt: '' },
+  { image: tile5.src, alt: '' },
   { text: 'prototyping', kind: 'outline' },
   { text: 'Figma', kind: 'mono' },
 ];
-
-const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling', 'Front-end', 'Play'];
 ---
 
 <Layout bleed>
@@ -62,11 +66,11 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
     <GridMotion client:load items={gridItems} gradientColor="#123a52" />
 
     <div class="hero-content shell">
-      <p class="eyebrow">{site.location} · Available for work</p>
+      <p class="eyebrow">Chicago</p>
 
       <h1 class="hero-title">
         <span class="hero-line">Aine</span>
-        <span class="hero-line grad">Zhang</span>
+        <span class="hero-line hero-name-pop">Zhang</span>
       </h1>
 
       <p class="hero-role">
@@ -94,17 +98,6 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
     </a>
   </section>
 
-  <!-- ===================== MARQUEE ===================== -->
-  <div class="marquee">
-    <div class="marquee-track">
-      {[0, 1].map(() => (
-        <div class="marquee-item">
-          {marquee.map((word) => (<>{word}<span aria-hidden="true">✦</span></>))}
-        </div>
-      ))}
-    </div>
-  </div>
-
   <!-- ===================== INTRO ===================== -->
   <section class="section shell" id="intro">
     <div class="panel panel-split intro-panel" data-reveal="0">
@@ -130,16 +123,15 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
       </div>
 
       <div class="intro-photo">
-        <img
-          src={portrait.src}
-          alt="Aine Zhang"
-          width={PORTRAIT_W}
-          height={portraitH}
-          loading="lazy"
-          decoding="async"
-        />
-        <div class="intro-photo-tag">
-          <span class="status" data-status="live">Currently building</span>
+        <div class="intro-photo-frame">
+          <img
+            src={portrait.src}
+            alt="Aine Zhang"
+            width={PORTRAIT_W}
+            height={portraitH}
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       </div>
     </div>
@@ -162,62 +154,26 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
       {featured.map((project, i) => <ProjectCard project={project} index={i} />)}
     </div>
   </section>
-
-  <!-- ===================== SKILLS ===================== -->
-  <section class="section shell" id="skills">
-    <div class="section-head" data-reveal="0">
-      <div>
-        <p class="eyebrow">Toolkit</p>
-        <h2>What I work with</h2>
-      </div>
-    </div>
-
-    <div class="skills-grid">
-      {skills.map((group, i) => (
-        <div class="panel skill-card" data-accent={group.accent} data-reveal={i}>
-          <div class="skill-index">0{i + 1}</div>
-          <h3>{group.title}</h3>
-          <ul class="skill-list">
-            {group.items.map((item) => <li><span class="skill-bullet"></span>{item}</li>)}
-          </ul>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- ===================== CONTACT ===================== -->
-  <section class="section shell" id="contact">
-    <div class="panel contact-cta" data-reveal="0">
-      <div>
-        <p class="eyebrow">Next</p>
-        <h2>Got something<br />worth building?</h2>
-        <p class="lede" style="margin-top: 1rem;">
-          I’m open to internships, collaborations, and projects that sound like a bad idea
-          until they work.
-        </p>
-      </div>
-
-      <div class="contact-list">
-        {socials.map((s) => (
-          <a
-            class="contact-row"
-            href={s.href}
-            target={s.href.startsWith('http') ? '_blank' : undefined}
-            rel={s.href.startsWith('http') ? 'noopener noreferrer' : undefined}
-          >
-            <span class="contact-label">{s.label}</span>
-            <span class="contact-handle">{s.handle}</span>
-            <span class="contact-arrow" aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </div>
-    </div>
-  </section>
 </Layout>
 
 <style>
+  /* Loaded here (not the shared layout) so the extra request only happens on
+     this page — used solely for the hero name below. */
+  @import url('https://fonts.googleapis.com/css2?family=Archivo:wght@800&display=swap');
+
   /* ---------------- hero ---------------- */
+  /* The hero sits on GridMotion's dark tile background, not the page's white
+     surface, so it scopes its own dark-mode token overrides here rather than
+     using the (now light-themed) site defaults. */
   .hero {
+    --ink: #f2f8f8;
+    --ink-dim: #b7ccd6;
+    --ink-faint: #7d97a3;
+    --line: rgba(238, 246, 246, 0.16);
+    --line-strong: rgba(238, 246, 246, 0.28);
+    --glass: rgba(238, 246, 246, 0.06);
+    --glass-hi: rgba(238, 246, 246, 0.1);
+    --c: #7fd8ff;
     position: relative;
     min-height: min(100svh, 940px);
     display: grid;
@@ -248,11 +204,20 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
     justify-content: center;
     gap: 0 0.28em;
     margin-bottom: 0.75rem;
+    font-family: 'Archivo', var(--font-display);
+    font-weight: 800;
     font-size: clamp(3.5rem, 15vw, 10rem);
     line-height: 0.88;
   }
 
-  .hero-line { display: block; }
+  /* Explicit color, not inherited — h1 never sets its own `color` globally,
+     so without this it would inherit body's already-resolved (light-theme,
+     dark) value instead of re-evaluating var(--ink) against .hero's local
+     dark-mode override, making the "Aine" span invisible on the dark hero. */
+  .hero-line { display: block; color: var(--ink); }
+
+  /* Flat, not a moving gradient — a single fixed pop of the accent colour. */
+  .hero-name-pop { color: var(--a); }
 
   .hero-role {
     display: inline-flex;
@@ -343,15 +308,31 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
   /* ---------------- intro ---------------- */
   .intro-panel { align-items: center; }
 
-  .intro-photo {
+  .intro-photo { position: relative; }
+
+  /* A soft, blurred mint/cobalt wash bleeding out from behind the frame —
+     the "refreshing" backdrop, in place of the old status pill. */
+  .intro-photo::before {
+    content: '';
+    position: absolute;
+    inset: -9%;
+    z-index: -1;
+    background:
+      radial-gradient(55% 55% at 26% 18%, rgba(0, 245, 200, 0.32), transparent 70%),
+      radial-gradient(50% 50% at 82% 88%, rgba(62, 123, 250, 0.24), transparent 70%);
+    filter: blur(38px);
+  }
+
+  .intro-photo-frame {
     position: relative;
     border-radius: var(--radius-lg);
     overflow: hidden;
     border: 1px solid var(--line);
     aspect-ratio: 4 / 5;
+    box-shadow: var(--shadow-md);
   }
 
-  .intro-photo img {
+  .intro-photo-frame img {
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -359,117 +340,7 @@ const marquee = ['Research', 'Interfaces', 'Motion design', 'Data storytelling',
     transition: transform 0.8s var(--ease);
   }
 
-  .intro-photo:hover img { transform: scale(1.04); }
-
-  .intro-photo-tag {
-    position: absolute;
-    left: 1rem;
-    bottom: 1rem;
-    padding: 0.5rem 0.9rem;
-    border-radius: 999px;
-    background: rgba(7, 6, 12, 0.75);
-    backdrop-filter: blur(10px);
-    border: 1px solid var(--line);
-  }
-
-  /* ---------------- skills ---------------- */
-  .skills-grid {
-    display: grid;
-    gap: 1.25rem;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 270px), 1fr));
-  }
-
-  .skill-card {
-    position: relative;
-    overflow: hidden;
-    transition: border-color 0.4s var(--ease), transform 0.4s var(--ease);
-  }
-
-  .skill-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background: var(--accent);
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.5s var(--ease);
-  }
-
-  .skill-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
-  .skill-card:hover::after { transform: scaleX(1); }
-
-  .skill-index {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.2em;
-    color: var(--accent);
-    margin-bottom: 0.6rem;
-  }
-
-  .skill-list {
-    list-style: none;
-    padding: 0;
-    margin: 1.1rem 0 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.55rem;
-    color: var(--ink-dim);
-    font-size: 0.94rem;
-  }
-
-  .skill-list li { display: flex; align-items: center; gap: 0.7rem; }
-
-  .skill-bullet {
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--accent);
-    flex: none;
-  }
-
-  /* ---------------- contact ---------------- */
-  .contact-cta {
-    display: grid;
-    gap: clamp(2rem, 5vw, 4rem);
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-    align-items: center;
-  }
-
-  .contact-list { display: flex; flex-direction: column; }
-
-  .contact-row {
-    display: grid;
-    grid-template-columns: 7rem 1fr auto;
-    align-items: center;
-    gap: 1rem;
-    padding: 1rem 0.25rem;
-    border-top: 1px solid var(--line);
-    text-decoration: none;
-    transition: padding 0.3s var(--ease), color 0.3s var(--ease);
-  }
-
-  .contact-row:last-child { border-bottom: 1px solid var(--line); }
-  .contact-row:hover { padding-inline: 0.75rem 0; color: var(--c); }
-
-  .contact-label {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--ink-faint);
-  }
-
-  .contact-handle { font-weight: 500; overflow-wrap: anywhere; }
-  .contact-arrow { color: var(--ink-faint); }
-  .contact-row:hover .contact-arrow { color: var(--c); }
-
-  @media (max-width: 560px) {
-    .contact-row { grid-template-columns: 1fr auto; }
-    .contact-label { grid-column: 1 / -1; }
-  }
+  .intro-photo:hover .intro-photo-frame img { transform: scale(1.04); }
 </style>
 
 <script>
