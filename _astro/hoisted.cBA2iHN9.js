@@ -1,1 +1,0 @@
-import"./hoisted.DFo0EN0c.js";const t=document.getElementById("rotator"),o=JSON.parse(t?.dataset.words??"[]");if(t&&o.length>1&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){let e=0;setInterval(()=>{e=(e+1)%o.length,t.textContent=o[e],t.style.animation="none",t.offsetWidth,t.style.animation=""},2200)}
