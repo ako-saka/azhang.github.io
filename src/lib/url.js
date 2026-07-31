@@ -1,14 +1,18 @@
 const BASE = import.meta.env.BASE_URL || '/';
 
 /**
- * Prefix an internal path with the deploy base path.
+ * Prefix an internal path with the deploy base path (read from astro.config.mjs).
  * Use this for EVERY internal link/asset so the site keeps working whether it
  * is served from the domain root or from a GitHub Pages sub-path.
  *
- *   withBase('/about')      -> '/azhang/about'
- *   withBase('/')           -> '/azhang/'
- *   withBase('/#work')      -> '/azhang/#work'
+ * With the current `base: '/'` (the repo serves at the domain root):
+ *   withBase('/about')      -> '/about'
+ *   withBase('/')           -> '/'
+ *   withBase('/#work')      -> '/#work'
  *   withBase('https://...') -> unchanged
+ *
+ * If `base` were `/azhang` instead, the same calls would return
+ * '/azhang/about', '/azhang/', '/azhang/#work'.
  *
  * @param {string} path
  * @returns {string}
@@ -24,7 +28,7 @@ export function withBase(path = '/') {
 
 /**
  * True when `href` is the page currently being rendered (used for nav state).
- * @param {string} href  an already-based href, e.g. '/azhang/about'
+ * @param {string} href  an already-based href, e.g. '/about'
  * @param {string} pathname  Astro.url.pathname
  */
 export function isActive(href, pathname) {

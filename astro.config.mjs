@@ -1,12 +1,14 @@
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 
-// The repo is `ako-saka/azhang`, so GitHub Pages serves the site from a
-// sub-path: https://ako-saka.github.io/azhang/
+// The repo is `ako-saka/azhang.github.io` — GitHub's special "user site" name,
+// which serves at the domain root: https://ako-saka.github.io/
 //
-// >>> CUSTOMIZE: if you ever move to a custom domain (e.g. ainezhang.com) or
-// rename the repo to `ako-saka.github.io`, set `base: '/'` and update `site`.
-const base = '/azhang';
+// >>> CUSTOMIZE: if you ever rename the repo back to something like `azhang`
+// (a regular project repo), Pages instead serves from a sub-path and this
+// needs to go back to `base: '/azhang'`.
+const base = '/';
+const prefix = base === '/' ? '' : base;
 
 export default defineConfig({
   site: 'https://ako-saka.github.io',
@@ -14,13 +16,13 @@ export default defineConfig({
   trailingSlash: 'ignore',
   integrations: [react()],
   // Old URLs from the pre-Astro site, kept so shared links don't 404.
-  // Astro does NOT prepend `base` to redirect targets — hence the template strings.
+  // Astro does NOT prepend `base` to redirect targets — hence the manual prefix.
   redirects: {
-    '/iching': `${base}/projects/i-ching`,
-    '/degdp': `${base}/projects/degdp`,
-    '/project2': `${base}/projects`,
-    '/project3': `${base}/projects`,
-    '/project5': `${base}/projects`,
-    '/project6': `${base}/projects`,
+    '/iching': `${prefix}/projects/i-ching`,
+    '/degdp': `${prefix}/projects/degdp`,
+    '/project2': `${prefix}/projects`,
+    '/project3': `${prefix}/projects`,
+    '/project5': `${prefix}/projects`,
+    '/project6': `${prefix}/projects`,
   },
 });

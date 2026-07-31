@@ -67,7 +67,7 @@ export const projects = [
     summary:
       'An Astro site with a GSAP-driven parallax grid for a front door. Static, fast, and deployed straight from a GitHub Action.',
     tags: ['Astro', 'React', 'GSAP', 'GitHub Pages'],
-    links: [{ label: 'Source on GitHub', href: 'https://github.com/ako-saka/azhang' }],
+    links: [{ label: 'Source on GitHub', href: 'https://github.com/ako-saka/azhang.github.io' }],
     body: [
       'Static-generated with Astro, so the only JavaScript that ships is the interactive parts: the hero grid, the interests explorer, and a handful of scroll effects.',
       'The hero is a 4×7 grid rotated fifteen degrees, with each row tracking the cursor at a different rate. GSAP does the easing; the rows have different inertia so the whole thing lags behind your hand like fabric.',

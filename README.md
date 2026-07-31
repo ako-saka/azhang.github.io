@@ -3,7 +3,7 @@
 An Astro static site with a GSAP-driven parallax grid hero (React Bits' `GridMotion`).
 Dark theme, motion-forward, deployed to GitHub Pages.
 
-**Live:** https://ako-saka.github.io/azhang/
+**Live:** https://ako-saka.github.io/
 
 ---
 
@@ -24,18 +24,14 @@ Adding a project is one entry in `src/data/projects.js`; the card on `/projects`
 page at `/projects/<slug>` are both generated from it. Paragraphs starting with `>>>` render
 as a visible "note to self" callout, so unfinished copy never reads as real.
 
-Drop a PDF at `public/aine-zhang-resume.pdf` to activate the resume download button.
-
 ## Local development
 
 ```bash
 npm install
-npm run dev        # http://localhost:4321/azhang/
+npm run dev        # http://localhost:4321/
 npm run build      # -> dist/
 npm run build:docs # -> dist/ then copies to docs/
 ```
-
-The dev URL includes `/azhang` because of the `base` setting — see below.
 
 ## Structure
 
@@ -56,15 +52,27 @@ public/         favicon.svg, .nojekyll, (put your resume PDF here)
 
 Pushing to `main` triggers [.github/workflows/deploy.yml](.github/workflows/deploy.yml),
 which builds the site, copies it into `docs/`, and publishes that to the `gh-pages` branch.
+**That publish is not the same as the site being live** — GitHub Pages has to be separately
+configured, in the repo's own Settings, to actually serve from that branch:
 
-Three things this setup depends on — worth knowing before you change them:
+> Settings → Pages → Build and deployment → Source: **Deploy from a branch** →
+> Branch: **`gh-pages`** / **`(root)`** → Save.
 
-- **`base: '/azhang'`** in [astro.config.mjs](astro.config.mjs). The repo isn't named
-  `ako-saka.github.io`, so Pages serves from a sub-path. Every internal link goes through
-  `withBase()` for this reason. Moving to a custom domain? Set `base: '/'`, update `site`,
-  and add a `public/CNAME`.
+This is easy to lose after renaming a repo (renaming to `ako-saka.github.io` in particular
+can silently drop the Pages source setting) — if the Actions tab shows green but the site
+shows GitHub's own "Site not found" page, check this first.
+
+Four things this setup depends on — worth knowing before you change them:
+
+- **`base: '/'`** in [astro.config.mjs](astro.config.mjs). The repo is named
+  `ako-saka.github.io` — GitHub's special "user site" name — so Pages serves from the
+  domain root, not a sub-path. Every internal link goes through `withBase()` for this
+  reason, so if you ever rename the repo to something ordinary (e.g. back to `azhang`),
+  Pages goes back to serving from `/azhang/` and this needs to become `base: '/azhang'` again.
 - **`public/.nojekyll`.** Without it GitHub runs Jekyll, which ignores any directory
   starting with an underscore — including `_astro/`, i.e. all the CSS and JS.
+- **`permissions: contents: write`** in the workflow. Newer repos default `GITHUB_TOKEN`
+  to read-only, which makes the push to `gh-pages` fail with a 403.
 - **Redirect targets include the base manually.** Astro doesn't prefix them for you.
 
 ## Accessibility & performance notes
