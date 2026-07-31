@@ -1,6 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
+// Default import, not `{ gsap }` — under Node's strict ESM loader (used by
+// Astro's SSR build step in CI), gsap's CJS export shape can't always be
+// statically analyzed for a named export, even though it works fine locally.
+import gsapPkg from 'gsap';
 import './GridMotion.css';
+
+const gsap = gsapPkg.gsap ?? gsapPkg;
 
 /**
  * A GridMotion item can be:
