@@ -51,13 +51,13 @@
   height: 100%;
   overflow: hidden;
   border-radius: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: #100d1a;
+  border: 1px solid rgba(180, 220, 230, 0.08);
+  background: #0a1420;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  color: var(--ink, #f4f2ff);
+  color: var(--ink, #eef6f6);
 }
 
 .gm-tile-img {
@@ -73,7 +73,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(140deg, rgba(139, 92, 255, 0.28), rgba(255, 77, 109, 0.16));
+  background: linear-gradient(140deg, rgba(62, 123, 250, 0.3), rgba(0, 245, 200, 0.14));
   mix-blend-mode: color;
 }
 
@@ -91,24 +91,24 @@
 /* --- tile variants -------------------------------------------------------- */
 /* Solid tiles are deliberately muted — they are wallpaper, not content, and at
    full saturation they compete with the hero headline sitting on top. */
-.gm-tile[data-kind='solid'] { color: rgba(11, 7, 16, 0.9); border-color: transparent; }
-.gm-tile[data-tone='a'][data-kind='solid'] { background: linear-gradient(150deg, #a83350, #a8523c); }
-.gm-tile[data-tone='b'][data-kind='solid'] { background: linear-gradient(150deg, #5b3ca8, #3c5aa8); }
-.gm-tile[data-tone='c'][data-kind='solid'] { background: linear-gradient(150deg, #2a9483, #379a6f); }
+.gm-tile[data-kind='solid'] { color: rgba(4, 16, 28, 0.92); border-color: transparent; }
+.gm-tile[data-tone='a'][data-kind='solid'] { background: linear-gradient(150deg, #0d8f79, #12a68d); }
+.gm-tile[data-tone='b'][data-kind='solid'] { background: linear-gradient(150deg, #1f3a63, #2b5490); }
+.gm-tile[data-tone='c'][data-kind='solid'] { background: linear-gradient(150deg, #275c74, #327b98); }
 
 .gm-tile[data-kind='outline'] {
-  background: rgba(255, 255, 255, 0.02);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(180, 220, 230, 0.02);
+  border-color: rgba(180, 220, 230, 0.16);
 }
 
-.gm-tile[data-kind='outline'] .gm-tile-label { color: rgba(244, 242, 255, 0.72); }
+.gm-tile[data-kind='outline'] .gm-tile-label { color: rgba(238, 246, 246, 0.72); }
 
 .gm-tile[data-kind='glyph'] {
-  background: #0c0a14;
+  background: #091220;
   font-size: clamp(1.4rem, 3vw, 2.6rem);
 }
 
-.gm-tile[data-kind='mono'] { background: #0c0a14; }
+.gm-tile[data-kind='mono'] { background: #091220; }
 
 .gm-tile[data-kind='mono'] .gm-tile-label {
   font-family: var(--font-mono, monospace);
@@ -116,7 +116,7 @@
   font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: rgba(179, 174, 203, 0.85);
+  color: rgba(159, 185, 196, 0.85);
 }
 
 /* --- readability veil ----------------------------------------------------- */
@@ -127,8 +127,8 @@
   z-index: 2;
   pointer-events: none;
   background:
-    radial-gradient(52% 55% at 50% 46%, rgba(7, 6, 12, 0.97) 0%, rgba(7, 6, 12, 0.92) 45%, rgba(7, 6, 12, 0.55) 72%, transparent 92%),
-    linear-gradient(180deg, rgba(7, 6, 12, 0.82) 0%, rgba(7, 6, 12, 0.3) 24%, rgba(7, 6, 12, 0.35) 55%, var(--bg, #07060c) 97%);
+    radial-gradient(52% 55% at 50% 46%, rgba(5, 11, 20, 0.97) 0%, rgba(5, 11, 20, 0.92) 45%, rgba(5, 11, 20, 0.55) 72%, transparent 92%),
+    linear-gradient(180deg, rgba(5, 11, 20, 0.82) 0%, rgba(5, 11, 20, 0.3) 24%, rgba(5, 11, 20, 0.35) 55%, var(--bg, #050b14) 97%);
   backdrop-filter: blur(1.5px);
 }
 

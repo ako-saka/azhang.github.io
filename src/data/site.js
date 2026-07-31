@@ -20,17 +20,16 @@ export const site = {
 export const socials = [
   { label: 'Email', handle: 'ainez@uchicago.edu', href: 'mailto:ainez@uchicago.edu', icon: 'mail' },
   { label: 'GitHub', handle: '@ako-saka', href: 'https://github.com/ako-saka', icon: 'github' },
-  // >>> CUSTOMIZE: replace with your real profile URLs (or delete the line).
   { label: 'LinkedIn', handle: 'in/ainezhang', href: 'https://www.linkedin.com/in/ainezhang/', icon: 'linkedin' },
-  { label: 'Instagram', handle: '@ainezhang', href: 'https://instagram.com/ainezhang', icon: 'instagram' },
+  { label: 'Instagram', handle: '@ainezhang_', href: 'https://instagram.com/ainezhang_', icon: 'instagram' },
 ];
 
 export const nav = [
   { href: '/', label: 'Home' },
-  { href: '/projects', label: 'Work' },
   { href: '/about', label: 'About' },
-  { href: '/interests', label: 'Interests' },
+  { href: '/projects', label: 'Work' },
   { href: '/resume', label: 'Resume' },
+  { href: '/interests', label: 'Interests' },
   { href: '/contact', label: 'Contact' },
 ];
 

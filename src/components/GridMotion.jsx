@@ -55,7 +55,7 @@ function normalise(item, index) {
  */
 export default function GridMotion({
   items = [],
-  gradientColor = '#1a1030',
+  gradientColor = '#0e2b3f',
   intensity = 1,
   drift = true,
   veil = true,

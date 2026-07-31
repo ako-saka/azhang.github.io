@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import { nav, site, socials } from '../data/site.js';
 import { withBase, isActive } from '../lib/url.js';
+import StaggeredMenu from '../components/StaggeredMenu.jsx';
 
 const {
   title,
@@ -18,6 +19,14 @@ const navItems = nav.map((item) => {
   const href = withBase(item.href);
   return { ...item, href, current: isActive(href, pathname) };
 });
+
+const menuItems = navItems.map((item) => ({
+  label: item.label,
+  ariaLabel: `Go to ${item.label}`,
+  link: item.href,
+}));
+
+const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
 ---
 <!doctype html>
 <html lang="en">
@@ -35,7 +44,7 @@ const navItems = nav.map((item) => {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#07060c" />
+    <meta name="theme-color" content="#050b14" />
 
     <!-- Marks JS as available before first paint, so scroll-reveal styles only
          apply when something can actually un-hide them. -->
@@ -55,33 +64,20 @@ const navItems = nav.map((item) => {
 
     <a class="skip-link" href="#main">Skip to content</a>
 
-    <header class="topbar" id="topbar" data-stuck="false">
-      <div class="topbar-inner">
-        <a class="brand" href={withBase('/')}>
-          <span class="brand-dot"></span>
-          {site.name}
-        </a>
-
-        <button
-          class="nav-toggle"
-          id="nav-toggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="site-nav"
-          aria-label="Toggle navigation"
-        >
-          <span></span><span></span><span></span>
-        </button>
-
-        <nav class="nav" id="site-nav" data-open="false">
-          {navItems.map((item) => (
-            <a class="tab" href={item.href} aria-current={item.current ? 'page' : undefined}>
-              {item.label}
-            </a>
-          ))}
-        </nav>
-      </div>
-    </header>
+    <StaggeredMenu
+      client:load
+      position="right"
+      items={menuItems}
+      socialItems={socialItems}
+      displaySocials
+      displayItemNumbering
+      brandLabel={site.name}
+      brandHref={withBase('/')}
+      colors={['#0b2a45', '#00f5c8']}
+      accentColor="#00f5c8"
+      menuButtonColor="#eef6f6"
+      openMenuButtonColor="#04101c"
+    />
 
     <main id="main" class={bleed ? '' : 'shell'}>
       <slot />
@@ -135,7 +131,7 @@ const navItems = nav.map((item) => {
         padding: 0.7rem 1.1rem;
         border-radius: 999px;
         background: var(--ink);
-        color: #07060c;
+        color: var(--ink-on-accent);
         font-weight: 600;
         text-decoration: none;
       }
@@ -144,41 +140,17 @@ const navItems = nav.map((item) => {
         left: 1rem;
       }
 
+      /* The header is now a fixed overlay (StaggeredMenu), not an in-flow
+         sticky bar, so non-bleed pages need their own top clearance. Bleed
+         pages (the homepage) skip this — their hero has its own top padding
+         and is meant to sit behind the transparent header. */
       main.shell {
         min-height: 55vh;
+        padding-top: 4.5rem;
       }
     </style>
 
     <script>
-      // --- sticky nav state -------------------------------------------------
-      const topbar = document.getElementById('topbar');
-      const onScroll = () => {
-        topbar?.setAttribute('data-stuck', String(window.scrollY > 24));
-      };
-      onScroll();
-      window.addEventListener('scroll', onScroll, { passive: true });
-
-      // --- mobile nav -------------------------------------------------------
-      const toggle = document.getElementById('nav-toggle');
-      const siteNav = document.getElementById('site-nav');
-
-      const setNav = (open: boolean) => {
-        toggle?.setAttribute('aria-expanded', String(open));
-        siteNav?.setAttribute('data-open', String(open));
-      };
-
-      toggle?.addEventListener('click', () => {
-        setNav(siteNav?.getAttribute('data-open') !== 'true');
-      });
-
-      siteNav?.addEventListener('click', (event) => {
-        if (event.target instanceof HTMLAnchorElement) setNav(false);
-      });
-
-      document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape') setNav(false);
-      });
-
       // --- scroll reveal ----------------------------------------------------
       const revealables = document.querySelectorAll<HTMLElement>('[data-reveal]');
       const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
