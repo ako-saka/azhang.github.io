@@ -122,7 +122,8 @@
 }
 
 /* --- readability veil ----------------------------------------------------- */
-/* Dims the middle so hero copy stays legible, and fades the grid into the page. */
+/* Dims the middle so hero copy stays legible. Stays dark top to bottom —
+   deliberately no fade into the page background. */
 .gm-veil {
   position: absolute;
   inset: 0;
@@ -130,7 +131,7 @@
   pointer-events: none;
   background:
     radial-gradient(52% 55% at 50% 46%, rgba(5, 11, 20, 0.97) 0%, rgba(5, 11, 20, 0.92) 45%, rgba(5, 11, 20, 0.55) 72%, transparent 92%),
-    linear-gradient(180deg, rgba(5, 11, 20, 0.82) 0%, rgba(5, 11, 20, 0.3) 24%, rgba(5, 11, 20, 0.35) 55%, var(--bg, #050b14) 97%);
+    linear-gradient(180deg, rgba(5, 11, 20, 0.82) 0%, rgba(5, 11, 20, 0.3) 24%, rgba(5, 11, 20, 0.35) 55%, rgba(5, 11, 20, 0.85) 97%);
   backdrop-filter: blur(1.5px);
 }
 

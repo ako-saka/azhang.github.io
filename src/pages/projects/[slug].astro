@@ -3,6 +3,8 @@ import Layout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects.js';
 import { withBase } from '../../lib/url.js';
 import ASCIIText from '../../components/ASCIIText.jsx';
+import { getImage } from 'astro:assets';
+import stardewBg from '../../images/stardewbackground.jpg';
 
 export function getStaticPaths() {
   return projects.map((project, index) => ({
@@ -16,6 +18,13 @@ export function getStaticPaths() {
 }
 
 const { project, prev, next } = Astro.props;
+
+// Only the DeGDP banner uses a photo background — resized/darkened at build
+// time rather than shipping the full-res source.
+const titleBanner =
+  project.slug === 'degdp'
+    ? await getImage({ src: stardewBg, width: 1600, format: 'webp', quality: 72 })
+    : null;
 
 const statusLabel = { live: 'Live', wip: 'In progress', archived: 'Archived' };
 const meta = [
@@ -39,7 +48,15 @@ const isNote = (text) => text.trim().startsWith('>>>');
       <p class="eyebrow">{project.kicker}</p>
 
       {project.titleEffect === 'ascii' ? (
-        <div class="project-title-ascii" aria-label={project.title}>
+        <div
+          class="project-title-ascii"
+          aria-label={project.title}
+          style={
+            titleBanner
+              ? `background-image: linear-gradient(180deg, rgba(4, 10, 18, 0.66), rgba(4, 10, 18, 0.8)), url(${titleBanner.src});`
+              : undefined
+          }
+        >
           <ASCIIText
             client:visible
             text={project.title}
@@ -111,6 +128,10 @@ const isNote = (text) => text.trim().startsWith('>>>');
 </Layout>
 
 <style>
+  article {
+    background: #ffffff;
+  }
+
   .back {
     display: inline-flex;
     align-items: center;
@@ -151,7 +172,9 @@ const isNote = (text) => text.trim().startsWith('>>>');
     margin-bottom: 1.25rem;
     border-radius: var(--radius-lg);
     overflow: hidden;
-    background: #050b14;
+    background-color: #050b14;
+    background-size: cover;
+    background-position: center;
   }
 
   .project-subtitle {
