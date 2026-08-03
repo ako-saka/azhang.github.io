@@ -2,6 +2,7 @@
 import Layout from '../../layouts/BaseLayout.astro';
 import { projects } from '../../data/projects.js';
 import { withBase } from '../../lib/url.js';
+import ASCIIText from '../../components/ASCIIText.jsx';
 
 export function getStaticPaths() {
   return projects.map((project, index) => ({
@@ -36,7 +37,25 @@ const isNote = (text) => text.trim().startsWith('>>>');
 
     <header class="project-header">
       <p class="eyebrow">{project.kicker}</p>
-      <h1>{project.title}</h1>
+
+      {project.titleEffect === 'ascii' ? (
+        <div class="project-title-ascii" aria-label={project.title}>
+          <ASCIIText
+            client:visible
+            text={project.title}
+            enableWaves={false}
+            asciiFontSize={7}
+            textFontSize={200}
+            planeBaseHeight={7}
+            textColor="#eef6f6"
+          />
+        </div>
+      ) : (
+        <h1>{project.title}</h1>
+      )}
+
+      {project.subtitle && <p class="project-subtitle">{project.subtitle}</p>}
+
       <p class="lede">{project.summary}</p>
 
       <div class="tag-row">
@@ -122,6 +141,25 @@ const isNote = (text) => text.trim().startsWith('>>>');
   .project-header h1 {
     font-size: clamp(2.75rem, 9vw, 6rem);
     margin-bottom: 1.25rem;
+  }
+
+  /* A dark stage for the ASCII-art title effect — deliberately not the page's
+     white surface, same "contained dark moment" pattern as the homepage hero. */
+  .project-title-ascii {
+    position: relative;
+    height: clamp(200px, 26vw, 340px);
+    margin-bottom: 1.25rem;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: #050b14;
+  }
+
+  .project-subtitle {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(1.1rem, 2.2vw, 1.5rem);
+    color: var(--ink-dim);
+    margin-bottom: 1rem;
   }
 
   .tag-row,

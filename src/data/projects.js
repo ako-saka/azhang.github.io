@@ -14,24 +14,28 @@ export const projects = [
   {
     slug: 'degdp',
     title: 'DeGDP',
-    kicker: 'Research · 2024',
+    subtitle: 'Degrowth as a Game Design Project',
+    // Renders the title as a mouse-reactive ASCII-art plane (ASCIIText)
+    // instead of plain text — see projects/[slug].astro.
+    titleEffect: 'ascii',
+    kicker: 'Research · 2025–2026',
     group: 'research',
     accent: 'a',
     status: 'live',
-    year: '2024',
-    role: 'Developer & designer',
-    team: 'With Elaine, guided by Enzo — KTP Project Committee',
+    year: '2025 — 2026',
+    role: 'Game designer & researcher',
+    team: 'Under the guidance of UChicago professor Katherine Buse',
     summary:
-      'A research collaboration exploring what economic wellbeing looks like when you stop measuring it with GDP alone.',
-    tags: ['Research', 'Data viz', 'Collaborative planning'],
+      'A critical mod of Stardew Valley that rebuilds the game’s economy around degrowth instead of endless growth.',
+    tags: ['Game design', 'Narrative design', 'Statistical analysis'],
     links: [
-      // >>> CUSTOMIZE: add the live URL / repo / paper when you have them.
-      // { label: 'Live site', href: 'https://…' },
+      { label: 'Project site', href: 'https://www.katherinebuse.com/stardew-valley-big-ag-mod.html' },
+      { label: 'Watch the reel', href: 'https://www.instagram.com/reel/DY0NH8qvEYO/?igsh=OWJiMjhpd2x0eHds' },
     ],
     body: [
-      'DeGDP started from a simple frustration: a single aggregate number gets used to describe the health of an entire society, and it quietly leaves out most of what people actually care about.',
-      'We built a tool for exploring alternative indicators side by side — the kind of thing you can put in front of a policy team and have an argument over. The focus was on making comparisons legible rather than on producing one authoritative answer.',
-      '>>> CUSTOMIZE: describe the methodology, the data sources, and what you personally built. A screenshot or two would land well here.',
+      'Degrowth questions economic growth as the measure of a healthy society — but one of the biggest obstacles to it is that almost nobody can picture what a degrowth future actually looks like. DeGDP tackles that by modding Stardew Valley: instead of the game’s usual arc of endless expansion and profit, we rebuilt its economic systems around degrowth logics, using the game as a testbed for what a smaller, more mutual economy could feel like to live inside.',
+      'My focus has been wealth inequality — how a shift away from growth could hurt the people who rely on cheap mass production and corporate employment if it isn’t designed carefully. I analyzed how the game’s working-class characters depend on its version of big-box retail, then wrote cinematic scenes from their perspective on growth and degrowth. That research became the community swap mechanic I lead-designed: a system where players and characters trade goods to meet each other’s needs directly, instead of buying and selling through the market.',
+      'The mod is in active development. Alongside finishing and testing the community swap mechanic, I’m building the Joja Factory — a new physical space depicting large-scale corporate agriculture — and will help run player surveys and interviews once a playable draft exists.',
     ],
   },
   {
