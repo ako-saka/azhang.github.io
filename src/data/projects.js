@@ -13,7 +13,7 @@
 export const projects = [
   {
     slug: 'degdp',
-    title: 'deGDP',
+    title: 'DeGDP',
     kicker: 'Research · 2024',
     group: 'research',
     accent: 'a',
@@ -29,7 +29,7 @@ export const projects = [
       // { label: 'Live site', href: 'https://…' },
     ],
     body: [
-      'deGDP started from a simple frustration: a single aggregate number gets used to describe the health of an entire society, and it quietly leaves out most of what people actually care about.',
+      'DeGDP started from a simple frustration: a single aggregate number gets used to describe the health of an entire society, and it quietly leaves out most of what people actually care about.',
       'We built a tool for exploring alternative indicators side by side — the kind of thing you can put in front of a policy team and have an argument over. The focus was on making comparisons legible rather than on producing one authoritative answer.',
       '>>> CUSTOMIZE: describe the methodology, the data sources, and what you personally built. A screenshot or two would land well here.',
     ],
