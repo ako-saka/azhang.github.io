@@ -6,58 +6,30 @@ import { featured } from '../data/projects.js';
 import { site } from '../data/site.js';
 import { withBase } from '../lib/url.js';
 import { getImage } from 'astro:assets';
-import photo1 from '../images/grid/photo-1.jpg';
-import photo2 from '../images/grid/photo-2.jpg';
-import photo3 from '../images/grid/photo-3.jpg';
-import photo4 from '../images/grid/photo-4.jpg';
-import photo5 from '../images/grid/photo-5.jpg';
+import portraitSrc from '../images/portrait.jpg';
 
-// Resize + re-encode at build time. The source JPEGs are several megabytes each;
-// these come out around 60–120 KB.
-const tile1 = await getImage({ src: photo1, width: 640, format: 'webp', quality: 70 });
-const tile2 = await getImage({ src: photo2, width: 640, format: 'webp', quality: 70 });
-const tile3 = await getImage({ src: photo3, width: 640, format: 'webp', quality: 70 });
-const tile4 = await getImage({ src: photo4, width: 640, format: 'webp', quality: 70 });
-const tile5 = await getImage({ src: photo5, width: 640, format: 'webp', quality: 70 });
 const PORTRAIT_W = 900;
-const portrait = await getImage({ src: photo4, width: PORTRAIT_W, format: 'webp', quality: 78 });
-const portraitH = Math.round((PORTRAIT_W * photo4.height) / photo4.width);
+const portrait = await getImage({ src: portraitSrc, width: PORTRAIT_W, format: 'webp', quality: 78 });
+const portraitH = Math.round((PORTRAIT_W * portraitSrc.height) / portraitSrc.width);
 
-// 28 tiles = 4 rows × 7 columns. Mix of words, images and glyphs so the grid
-// reads as a collage of what the site is about rather than filler.
-const gridItems = [
-  { text: 'research', kind: 'solid', tone: 'b' },
-  { text: 'DeGDP', kind: 'outline' },
-  { image: tile1.src, alt: '' },
-  { text: '☯', kind: 'glyph' },
-  { text: 'interfaces', kind: 'outline' },
-  { text: 'GSAP', kind: 'mono' },
-  { text: 'motion', kind: 'solid', tone: 'a' },
+// GridMotion is 4 rows × 7 cols = 28 tiles. Every photo dropped into
+// src/images/grid/ is picked up automatically — add or remove files there
+// and the grid updates on the next build, no code changes needed.
+const gridPhotoModules = import.meta.glob<{ default: ImageMetadata }>(
+  '../images/grid/*.{jpg,jpeg,png,webp}',
+  { eager: true }
+);
+const gridPhotos = Object.values(gridPhotoModules).map((mod) => mod.default);
 
-  { text: 'Astro', kind: 'mono' },
-  { text: 'I-Ching', kind: 'outline' },
-  { text: 'design', kind: 'solid', tone: 'c' },
-  { image: tile2.src, alt: '' },
-  { text: '🍜', kind: 'glyph' },
-  { text: 'data viz', kind: 'outline' },
-  { text: 'React', kind: 'mono' },
-
-  { text: 'play', kind: 'solid', tone: 'a' },
-  { text: '📷', kind: 'glyph' },
-  { text: 'typography', kind: 'outline' },
-  { text: 'Python', kind: 'mono' },
-  { image: tile3.src, alt: '' },
-  { image: tile4.src, alt: '' },
-  { text: 'build', kind: 'solid', tone: 'b' },
-
-  { text: 'curiosity', kind: 'outline' },
-  { text: 'TypeScript', kind: 'mono' },
-  { text: '🎧', kind: 'glyph' },
-  { text: 'storytelling', kind: 'solid', tone: 'c' },
-  { image: tile5.src, alt: '' },
-  { text: 'prototyping', kind: 'outline' },
-  { text: 'Figma', kind: 'mono' },
-];
+const GRID_TILES = 28;
+const gridTiles = await Promise.all(
+  gridPhotos.map((src) => getImage({ src, width: 640, format: 'webp', quality: 70 }))
+);
+// Cycle through the available photos to fill all 28 tiles (no-op once 28+ exist).
+const gridItems = Array.from({ length: GRID_TILES }, (_, i) => ({
+  image: gridTiles[i % gridTiles.length].src,
+  alt: '',
+}));
 ---
 
 <Layout bleed>
@@ -106,13 +78,15 @@ const gridItems = [
         <h2>I make software that<br />doesn’t feel like software.</h2>
         <div class="prose" style="margin-top: 1.25rem;">
           <p>
-            I’m a developer and designer working somewhere between research tooling and
-            interaction design. I like problems where the interface <strong>is</strong> the
-            argument — where how something moves changes what it means.
+            I am a student @ <span class="uchicago">UChicago</span> interested in computational
+            social science research. I major in sociology, statistics, and computational &amp;
+            applied math. I’m interested in studying how humans interact and construct the world
+            around them.
           </p>
           <p>
-            Recent work spans a rethinking of economic indicators, a three-thousand-year-old
-            divination system rebuilt for the browser, and whatever I’m tinkering with this week.
+            Projects I’ve been on recently span many different fields, including game design,
+            programming RAG models, archive work, and sociology. I’m interested in many fields
+            and always looking to broaden my perspectives.
           </p>
         </div>
         <div class="hero-actions" style="margin-top: 1.75rem;">
@@ -311,6 +285,9 @@ const gridItems = [
 
   /* ---------------- intro ---------------- */
   .intro-panel { align-items: center; }
+
+  /* UChicago's official maroon, not the site accent — a deliberate one-off. */
+  .uchicago { color: #800000; font-weight: 600; }
 
   .intro-photo { position: relative; }
 

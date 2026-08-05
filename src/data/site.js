@@ -11,10 +11,10 @@ export const site = {
   role: 'Student, researcher', // >>> CUSTOMIZE
   // One or two sentences. Appears in the hero and in <meta description>.
   tagline:
-    'I build things for the web that are a little more alive than they need to be — research tools, playful interfaces, and the occasional divination engine.', // >>> CUSTOMIZE
+    'A UChicago student studying sociology, statistics, and computational & applied math — interested in computational social science and how people interact with and construct the world around them.', // >>> CUSTOMIZE
   location: 'Chicago, IL / Shanghai, China / Hong Kong SAR', // >>> CUSTOMIZE
   // Rotating words in the hero. Keep them short.
-  keywords: ['research', 'social sciences', 'motion', 'data', 'computers'], // >>> CUSTOMIZE
+  keywords: ['research', 'sociology', 'statistics', 'data', 'computers'], // >>> CUSTOMIZE
 };
 
 export const socials = [
@@ -109,14 +109,6 @@ export const interests = [
     blurb:
       'Logging everything I watch and however many stars I think it deserves.',
     links: [{ label: 'Letterboxd', href: 'https://boxd.it/eoikN' }],
-  },
-  {
-    id: 'iching',
-    emoji: '☯',
-    title: 'I-Ching',
-    tags: ['divination', 'symbols', 'history'],
-    blurb:
-      'Ancient systems of meaning are basically very old user interfaces. I built one — see the projects page.',
   },
   {
     id: 'games',
