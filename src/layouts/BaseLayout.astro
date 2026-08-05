@@ -11,7 +11,11 @@ const {
   dark = false, // set true for a page that should run in night mode entirely
 } = Astro.props;
 
-const isDark = bleed || dark;
+// `bleed` pages (the homepage) have a dark hero at the top but a normal
+// white body below — so the floating menu button/theme-color stay dark-styled
+// to sit on that hero, without flipping the whole page's tokens to dark mode.
+const headerDark = bleed || dark;
+const isDark = dark;
 
 const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
 const pathname = Astro.url.pathname;
@@ -28,8 +32,6 @@ const menuItems = navItems.map((item) => ({
   ariaLabel: `Go to ${item.label}`,
   link: item.href,
 }));
-
-const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
 ---
 <!doctype html>
 <html lang="en">
@@ -47,7 +49,7 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content={isDark ? '#050b14' : '#ffffff'} />
+    <meta name="theme-color" content={headerDark ? '#050b14' : '#ffffff'} />
 
     <!-- Marks JS as available before first paint, so scroll-reveal styles only
          apply when something can actually un-hide them. -->
@@ -71,15 +73,13 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
       client:load
       position="right"
       items={menuItems}
-      socialItems={socialItems}
-      displaySocials
       displayItemNumbering
       brandLabel={site.name}
       brandHref={withBase('/')}
       colors={['#0b2a45', '#00f5c8']}
       accentColor="#00f5c8"
-      theme={isDark ? 'dark' : 'light'}
-      menuButtonColor={isDark ? '#eef6f6' : '#0a1620'}
+      theme={headerDark ? 'dark' : 'light'}
+      menuButtonColor={headerDark ? '#eef6f6' : '#0a1620'}
       openMenuButtonColor="#04101c"
     />
 

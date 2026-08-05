@@ -80,22 +80,34 @@ export const projects = [
   },
 
   // ---------------------------------------------------------------------------
-  // >>> CUSTOMIZE: three placeholder slots. Fill them in or delete them.
+  // >>> CUSTOMIZE: two placeholder slots. Fill them in or delete them.
   // ---------------------------------------------------------------------------
   {
     slug: 'dementiarag',
-    title: 'Multi-Agent RAG conversation system for Dementia Care',
-    kicker: 'Coming soon',
-    group: 'build',
+    title: 'Conversational Assistant for Dementia Patients',
+    subtitle: 'A retrieval-augmented, multi-agent system for dementia care',
+    kicker: 'Research · 2026',
+    group: 'research',
     accent: 'a',
     status: 'wip',
     year: '2026',
     role: 'Engineer, Researcher',
     team: 'Center of Aging @ HKU',
-    summary: 'A slot waiting for a real project. Tell me what goes here and I will write it up.',
-    tags: ['TODO'],
-    links: [{ label: 'Visit the live project', href: 'https://github.com/CoA-AI-HKU/CoA-Agent' }],
-    body: ['This page is a placeholder. Replace this entry in `src/data/projects.js`.'],
+    summary:
+      'A retrieval-augmented, multi-agent conversational assistant built to give people with dementia and their caregivers safe, source-grounded answers.',
+    tags: ['RAG', 'Multi-agent systems', 'LLMs', 'Healthcare AI'],
+    links: [
+      { label: 'Visit the live project', href: 'https://104-131-176-48.sslip.io/' },
+      { label: 'Source on GitHub', href: 'https://github.com/CoA-AI-HKU/CoA-Agent' },
+      { label: 'Center on Ageing @ HKU', href: 'https://ageing.hku.hk/' },
+      { label: 'UChicago Hong Kong research program', href: 'https://globalstudies.uchicago.edu/research-opportunity-hong-kong' },
+    ],
+    body: [
+      'Hong Kong’s population is aging fast — the share of residents 60 and older is projected to rise from 22.7% in 2016 to 35.1% by 2036 — and dementia now affects roughly one in ten older adults. Dementia isn’t a single disease but an umbrella term for conditions that erode memory, cognition, communication, and daily functioning, and its effects ripple outward to caregivers, who face real psychological strain of their own. Supporting people with dementia takes more than clinical treatment — it takes person-centered care that respects someone’s history, preferences, and relationships.',
+      'General-purpose LLMs are an obvious place to look for accessible, everyday support, but they weren’t built for this. Left unchecked they hallucinate, give bad advice, respond apathetically, or miss cultural context — risks that are especially dangerous when the person on the other end may have cognitive impairment, a stressed caregiver, or a question with real health consequences. A system meant for dementia care has to do more than sound right: it needs to recognize its own uncertainty, avoid diagnosing, flag safety-sensitive situations, and be upfront about its limits.',
+      'I’m building a retrieval-augmented, multi-agent conversational assistant to close that gap. Retrieval-augmented generation grounds answers in a curated, locally relevant knowledge base instead of the model’s raw training data, but RAG alone can’t decide when screening is appropriate, tell a caregiver’s question apart from a patient’s, catch a safety risk, or know when to say “talk to a doctor.” So the system splits those responsibilities across specialized agents — intent recognition, dementia-knowledge retrieval, screening support, safety assessment, and caregiver support — that coordinate instead of one model trying to do everything at once.',
+      'The project is grounded in Hong Kong specifically — a multilingual environment, high life expectancy, and caregivers who are frequently the adult children of the person with dementia. The goal is a system that’s genuinely useful for everyday questions about dementia care, behavior, and medication, while staying transparent about its evidence, its uncertainty, and where it needs to step aside for a professional.',
+    ],
   },
   {
     slug: 'project-five',

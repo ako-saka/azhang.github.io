@@ -4,16 +4,12 @@ import PageHeader from '../components/PageHeader.astro';
 import { site, skills, interests } from '../data/site.js';
 import { withBase } from '../lib/url.js';
 import { getImage } from 'astro:assets';
-import photo1 from '../images/grid/photo-1.jpg';
-import photo2 from '../images/grid/photo-2.jpg';
+import photo8 from '../images/grid/photo-8.jpg';
 
-// Build-time resize; the source files are multi-megabyte camera JPEGs.
+// Build-time resize; the source file is a multi-megabyte camera JPEG.
 const W1 = 800;
-const W2 = 800;
-const tall = await getImage({ src: photo1, width: W1, format: 'webp', quality: 78 });
-const wide = await getImage({ src: photo2, width: W2, format: 'webp', quality: 78 });
-const tallH = Math.round((W1 * photo1.height) / photo1.width);
-const wideH = Math.round((W2 * photo2.height) / photo2.width);
+const tall = await getImage({ src: photo8, width: W1, format: 'webp', quality: 78 });
+const tallH = Math.round((W1 * photo8.height) / photo8.width);
 
 // >>> CUSTOMIZE: these three lines are the fastest way to make this page yours.
 const facts = [
@@ -34,13 +30,9 @@ const facts = [
         social science research — how people interact with and construct the world around them.
       </p>
       <p>
-        My projects lately have spanned a lot of different fields — game design, programming
-        RAG models, archive work, and sociology research. I like moving between disciplines
-        rather than staying in one lane.
-      </p>
-      <p>
         I’m interested in a lot of things and always looking to broaden my perspective —
-        whether that’s a new dataset, a new archive, or a new way of asking a question.
+        whether that’s a new dataset, a new question, or a new way of thinking about people
+        and the systems they build.
       </p>
       <p>
         <strong>Outside of that:</strong> noodles, film photography, playlists that are far
@@ -51,9 +43,6 @@ const facts = [
     <div class="about-media" data-reveal="1">
       <figure class="photo photo-tall">
         <img src={tall.src} alt="Aine Zhang" width={W1} height={tallH} loading="lazy" decoding="async" />
-      </figure>
-      <figure class="photo photo-wide">
-        <img src={wide.src} alt="" width={W2} height={wideH} loading="lazy" decoding="async" />
       </figure>
     </div>
   </section>
@@ -141,7 +130,6 @@ const facts = [
   .photo:hover img { transform: scale(1.04); filter: saturate(1.05); }
 
   .photo-tall { aspect-ratio: 4 / 5; }
-  .photo-wide { aspect-ratio: 3 / 2; }
 
   .facts {
     display: grid;
@@ -191,10 +179,6 @@ const facts = [
 
   @media (max-width: 900px) {
     .about-lead { grid-template-columns: 1fr; }
-    .about-media { position: static; grid-template-columns: 1fr 1fr; }
-  }
-
-  @media (max-width: 560px) {
-    .about-media { grid-template-columns: 1fr; }
+    .about-media { position: static; }
   }
 </style>
