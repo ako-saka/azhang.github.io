@@ -147,7 +147,10 @@ export const groups = [
   { id: 'play', title: 'Play', blurb: 'Experiments with no deadline and no client.' },
 ];
 
-export const featured = projects.filter((p) => p.status === 'live').slice(0, 3);
+// Homepage picks, in order — explicit rather than auto-derived from status
+// so it can include work-in-progress projects and control the ordering.
+const FEATURED_SLUGS = ['degdp', 'dementiarag', 'i-ching'];
+export const featured = FEATURED_SLUGS.map((slug) => projects.find((p) => p.slug === slug));
 
 export function projectsIn(groupId) {
   return projects.filter((p) => p.group === groupId);
