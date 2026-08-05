@@ -24,7 +24,7 @@ export const projects = [
     status: 'live',
     year: '2025 — 2026',
     role: 'Game designer & researcher',
-    team: 'Under the guidance of UChicago professor Katherine Buse',
+    team: 'Under guidance of Professor Katherine Buse',
     summary:
       'A critical mod of Stardew Valley that rebuilds the game’s economy around degrowth instead of endless growth.',
     tags: ['Game design', 'Narrative design', 'Statistical analysis'],
@@ -41,11 +41,11 @@ export const projects = [
   {
     slug: 'i-ching',
     title: 'I-Ching',
-    kicker: 'Interactive · 2024',
+    kicker: 'Interactive · 2026',
     group: 'play',
     accent: 'b',
     status: 'live',
-    year: '2024',
+    year: '2026',
     role: 'Developer & designer',
     team: 'With Elaine, guided by Enzo — KTP Project Committee',
     summary:
@@ -83,18 +83,18 @@ export const projects = [
   // >>> CUSTOMIZE: three placeholder slots. Fill them in or delete them.
   // ---------------------------------------------------------------------------
   {
-    slug: 'project-four',
-    title: 'Untitled Project',
+    slug: 'dementiarag',
+    title: 'Multi-Agent RAG conversation system for Dementia Care',
     kicker: 'Coming soon',
     group: 'build',
     accent: 'a',
     status: 'wip',
     year: '2026',
-    role: 'TBD',
-    team: 'TBD',
+    role: 'Engineer, Researcher',
+    team: 'Center of Aging @ HKU',
     summary: 'A slot waiting for a real project. Tell me what goes here and I will write it up.',
     tags: ['TODO'],
-    links: [],
+    links: [{ label: 'Visit the live project', href: 'https://github.com/CoA-AI-HKU/CoA-Agent' }],
     body: ['This page is a placeholder. Replace this entry in `src/data/projects.js`.'],
   },
   {

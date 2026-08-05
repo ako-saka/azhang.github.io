@@ -38,7 +38,7 @@ const meta = [
 const isNote = (text) => text.trim().startsWith('>>>');
 ---
 
-<Layout title={project.title} description={project.summary}>
+<Layout title={project.title} description={project.summary} dark={project.slug === 'degdp'}>
   <article data-accent={project.accent}>
     <a class="back" href={withBase('/projects')}>
       <span aria-hidden="true">←</span> All work
@@ -129,7 +129,7 @@ const isNote = (text) => text.trim().startsWith('>>>');
 
 <style>
   article {
-    background: #ffffff;
+    background: var(--bg);
   }
 
   .back {

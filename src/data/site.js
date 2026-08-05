@@ -67,6 +67,15 @@ export const interests = [
       'I love good food, especially noodles in any shapes or sizes. Always my default meal.',
   },
   {
+    id: 'restaurants',
+    emoji: '🍽️',
+    title: 'Restaurants',
+    tags: ['dining out', 'reviews', 'food spots'],
+    blurb:
+      'Tracking every place I eat at, mostly so I remember what to reorder. Rate everything on Beli.',
+    links: [{ label: 'Beli', href: 'https://beliapp.co/app/ainez' }],
+  },
+  {
     id: 'rock climbing',
     emoji: '🧗‍♀️',
     title: 'Sports',
@@ -81,6 +90,7 @@ export const interests = [
     tags: ['playlists', 'concerts'],
     blurb:
       'R&B, Kpop, Jpop, a lot of different things...',
+    links: [{ label: 'Spotify', href: 'https://open.spotify.com/user/31idrehvq46yymbeg5qzpvglfhku?si=4l69mWv_QPK6xoSy4xuiPA&utm_source=copy-link' }],
   },
   {
     id: 'books',
@@ -89,6 +99,16 @@ export const interests = [
     tags: ['reading', 'fiction', 'essays'],
     blurb:
       'Trying to get back into the habit of reading... It is not exactly the easiest thing to do when I am drowning in assigned reading and addicted to screens.',
+    links: [{ label: 'Goodreads', href: 'https://www.goodreads.com/user/show/149668401-aine' }],
+  },
+  {
+    id: 'movies',
+    emoji: '🎬',
+    title: 'Movies',
+    tags: ['film', 'watchlist', 'reviews'],
+    blurb:
+      'Logging everything I watch and however many stars I think it deserves.',
+    links: [{ label: 'Letterboxd', href: 'https://boxd.it/eoikN' }],
   },
   {
     id: 'iching',
@@ -105,6 +125,7 @@ export const interests = [
     tags: ['puzzles', 'indie', 'design'],
     blurb:
       'Anything tagged as casual but is actually stressful... Ask about Animal Crossing, Stardew Valley, and Tomodachi life',
+    links: [{ label: 'Steam', href: 'https://steamcommunity.com/id/akosaka/' }],
   },
   {
     id: 'soccer',

@@ -8,7 +8,10 @@ const {
   title,
   description = site.tagline,
   bleed = false, // set true when the page starts with a full-bleed hero
+  dark = false, // set true for a page that should run in night mode entirely
 } = Astro.props;
+
+const isDark = bleed || dark;
 
 const pageTitle = title ? `${title} · ${site.name}` : `${site.name} — ${site.role}`;
 const pathname = Astro.url.pathname;
@@ -44,7 +47,7 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#ffffff" />
+    <meta name="theme-color" content={isDark ? '#050b14' : '#ffffff'} />
 
     <!-- Marks JS as available before first paint, so scroll-reveal styles only
          apply when something can actually un-hide them. -->
@@ -58,7 +61,7 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
     />
   </head>
 
-  <body>
+  <body data-theme={isDark ? 'dark' : undefined}>
     <div class="ambient"></div>
     <div class="grain"></div>
 
@@ -75,8 +78,8 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
       brandHref={withBase('/')}
       colors={['#0b2a45', '#00f5c8']}
       accentColor="#00f5c8"
-      theme={bleed ? 'dark' : 'light'}
-      menuButtonColor={bleed ? '#eef6f6' : '#0a1620'}
+      theme={isDark ? 'dark' : 'light'}
+      menuButtonColor={isDark ? '#eef6f6' : '#0a1620'}
       openMenuButtonColor="#04101c"
     />
 
@@ -87,11 +90,6 @@ const socialItems = socials.map((s) => ({ label: s.label, link: s.href }));
     <footer class="footer">
       <div class="shell">
         <div class="footer-inner">
-          <div>
-            <p class="eyebrow">Say hello</p>
-            <p class="footer-mark grad">Let’s make<br />something.</p>
-          </div>
-
           <div>
             <p class="eyebrow">Elsewhere</p>
             <ul class="footer-links">
